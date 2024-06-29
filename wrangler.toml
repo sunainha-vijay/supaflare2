@@ -1,0 +1,10 @@
+
+name = "supaflare-worker"
+main = 'index.js'
+usage_model = 'bundled'
+compatibility_flags = []
+workers_dev = true
+compatibility_date = "2021-10-10"
+kv_namespaces = [
+  { binding = "SUPAFLARE", id = "30479802e17c4da2b3253ea66b8f7e45" },
+]
