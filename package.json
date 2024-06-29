@@ -12,6 +12,6 @@
     "patch-package": "^6.4.7"
   },
   "scripts": {
-    "postinstall": "patch-package"
-  }
+  "postinstall": "if [ ! -x node_modules/.bin/patch-package ]; then npm install patch-package --save-dev; fi && patch-package"
+}
 }
