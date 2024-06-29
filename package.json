@@ -9,8 +9,7 @@
   ],
   "devDependencies": {
     "lerna": "^5.1.6",
-    "patch-package": "^6.4.7",
-    "postinstall-postinstall": "^2.1.0"
+    "patch-package": "^6.4.7"
   },
   "scripts": {
     "postinstall": "patch-package"
