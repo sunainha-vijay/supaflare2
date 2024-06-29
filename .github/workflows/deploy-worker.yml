@@ -22,7 +22,7 @@ jobs:
       - name: Set Up Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: "20"
+          node-version: "20.x"
       - run: npm install
       - name: Add mask
         run: |
