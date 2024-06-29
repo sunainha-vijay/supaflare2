@@ -12,7 +12,6 @@
     "patch-package": "^6.4.7"
   },
   "scripts": {
-  "postinstall": print(hello), //"if [ ! -x node_modules/.bin/patch-package ] ; then print(hello) npm install patch-package --save-dev; fi && patch-package"
-  "build": "wrangler build"
+  "postinstall": "patch-package"
 }
 }
