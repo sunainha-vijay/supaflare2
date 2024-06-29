@@ -12,7 +12,7 @@
     "patch-package": "^6.4.7"
   },
   "scripts": {
-  "download": "npx patch-package"
+  "download": "npx patch-package",
   "postinstall": "patch-package"
 }
 }
