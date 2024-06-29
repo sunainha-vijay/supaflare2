@@ -13,5 +13,6 @@
   },
   "scripts": {
   "postinstall": "if [ ! -x node_modules/.bin/patch-package ]; then npm install patch-package --save-dev; fi && patch-package"
+  "build": "wrangler build"
 }
 }
