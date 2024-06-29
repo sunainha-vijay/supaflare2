@@ -1,7 +1,6 @@
 
 name = "supaflare-worker"
 main = 'index.js'
-usage_model = 'bundled'
 compatibility_flags = []
 workers_dev = true
 compatibility_date = "2021-10-10"
