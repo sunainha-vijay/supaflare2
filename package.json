@@ -13,5 +13,6 @@
   },
   "scripts": {
   "download": "npx patch-package"
+  "postinstall": "patch-package"
 }
 }
