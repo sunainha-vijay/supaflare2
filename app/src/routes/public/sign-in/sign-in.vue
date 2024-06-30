@@ -42,10 +42,10 @@
 					<n-button @click="unactivatedOAuth">
 						<template #icon>
 							<n-icon>
-								<twitter />
+								<Facebook />
 							</n-icon>
 						</template>
-						Twitter
+						Facebook
 					</n-button>
 				</n-space>
 			</n-form>
@@ -57,7 +57,7 @@
 import { defineComponent, ref } from 'vue';
 import { handleSignIn, handleOAuthLogin } from '@/services/auth';
 import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon } from 'naive-ui';
-import { Github, Google, Twitter } from '@vicons/fa';
+import { Github, Google, Facebook } from '@vicons/fa';
 import { router } from '@/router';
 
 export default defineComponent({
@@ -72,7 +72,7 @@ export default defineComponent({
 		NIcon,
 		Github,
 		Google,
-		Twitter,
+		Facebook,
 	},
 	setup() {
 		const messageDuration = 5000;
