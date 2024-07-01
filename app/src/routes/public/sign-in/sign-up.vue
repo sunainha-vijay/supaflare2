@@ -1,84 +1,61 @@
 <template>
-  <public-view>
-    <div id="content">
-      <n-form ref="formRef" :model="model" :rules="rules">
-        <img class="logo" src="/supaflare.png" />
-        <h1>Sign Up</h1>
-        <n-form-item path="email" label="Email">
-          <n-input v-model:value="model.email" placeholder="Enter Email" />
-        </n-form-item>
-        <n-form-item path="password" label="Password">
-          <n-input
-            v-model:value="model.password"
-            type="password"
-            placeholder="Enter Password"
-          />
-        </n-form-item>
-        <n-button round type="primary" @click="handleSignUpButtonClick">
-          Sign Up
-        </n-button>
-      </n-form>
-    </div>
-  </public-view>
+  <div class="sign-up">
+    <h2>Sign Up</h2>
+    <form @submit.prevent="signUp">
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" v-model="email" required />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" v-model="password" required />
+      </div>
+      <button type="submit">Sign Up</button>
+    </form>
+    <div v-if="error">{{ error }}</div>
+  </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { handleSignUp } from '@/services/auth';
-import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon } from 'naive-ui';
-import { router } from '@/router';
+<script>
+import { ref } from 'vue'
+import { useSupabase } from '@supabase/supabase-js'
 
-export default defineComponent({
+export default {
   name: 'SignUp',
   setup() {
-    const messageDuration = 5000;
-    const formRef = ref();
-    const message = useMessage();
-    const modelRef = ref({
-      email: '',
-      password: '',
-    });
+    const email = ref('')
+    const password = ref('')
+    const error = ref(null)
+    const supabase = useSupabase()
 
-    const rules = {
-      email: [
-        {
-          required: true,
-          validator(rule: any, value: any) {
-            if (!value) {
-              return new Error('Email is required');
-            } else if (
-              !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
-                value
-              )
-            ) {
-              return new Error('Please enter a valid email address');
-            }
-            return true;
-          },
-          trigger: ['input', 'blur'],
-        },
-      ],
-      password: [
-        {
-          validator(rule: any, value: any) {
-            if (value && value.length < 6) {
-              return new Error('Invalid Password');
-            }
-            return true;
-          },
-          trigger: ['input', 'blur'],
-        },
-      ],
-    };
+    const signUp = async () => {
+      error.value = null
+      const { user, session, error: signUpError } = await supabase.auth.signUp({
+        email: email.value,
+        password: password.value
+      })
+      if (signUpError) {
+        error.value = signUpError.message
+      } else {
+        console.log('User signed up:', user)
+        console.log('Session:', session)
+      }
+    }
 
-    async function handleSignUpButtonClick(e: any) {
-      e.preventDefault();
-      if (formRef.value) {
-        formRef.value.validate(async (error: any) => {
-          if (!error) {
-            try {
-              const credentials = {
-                email: modelRef.value.email,
-                password: modelRef.value.password,
-              };
-              const { error
+    return {
+      email,
+      password,
+      signUp,
+      error
+    }
+  }
+}
+</script>
+
+<style scoped>
+.sign-up {
+  max-width: 400px;
+  margin: 0 auto;
+}
+</style>
+
