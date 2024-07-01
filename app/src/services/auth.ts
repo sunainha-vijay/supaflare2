@@ -11,10 +11,15 @@ async function handleSignIn(credentials: UserCredentials) {
 }
 
 async function handleSignup(credentials: UserCredentials) {
-	const { email, password } = credentials;
-	const { error } = await supabase.auth.signUp({ email, password });
-	return { error };
+  const { email, password } = credentials;
+  const { error } = await supabase.auth.signUp({ email, password });
+  if (error) return { error };
+
+  // Signup successful, display message or redirect
+  console.log("Signup successful! Please check your email to verify.");
+  return { error: null }; // Indicate successful signup
 }
+
 
 async function handleOAuthLogin(provider: Provider) {
 	const { error } = await supabase.auth.signIn({ provider });
