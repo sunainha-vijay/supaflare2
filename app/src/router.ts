@@ -3,7 +3,7 @@ import { useAppStore } from '@/stores/appStore';
 import { supabase } from '@/services/supabase';
 
 import SignInRoute from '@/routes/public/sign-in';
-import SignUpRoute from '@/routes/public/sign-up'; // Add this line
+import SignUpRoute from '@/routes/public/sign-in/sign-up.vue'; // Add this line
 
 const NotFoundRoute = () => import('@/routes/admin/not-found');
 const DashboardRoute = () => import('@/routes/admin/dashboard');
