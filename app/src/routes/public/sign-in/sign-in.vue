@@ -2,6 +2,9 @@
 	<public-view>
 		<div id="content">
 			<n-form ref="formRef" :model="model" :rules="rules">
+				</div>
+				<n-divider title-placement="left">Welcome to our UL Shortener!</n-divider>
+		                </div>
 				<img class="logo" src="/supaflare.png" />
 				<h1>Sign In</h1>
 				<n-form-item path="email" label="Email">
