@@ -42,10 +42,10 @@
 					<n-button @click="unactivatedOAuth">
 						<template #icon>
 							<n-icon>
-								<Facebook />
+								<twitter />
 							</n-icon>
 						</template>
-						Facebook
+						Twitter
 					</n-button>
 				</n-space>
 			</n-form>
@@ -57,7 +57,7 @@
 import { defineComponent, ref } from 'vue';
 import { handleSignIn, handleOAuthLogin } from '@/services/auth';
 import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon } from 'naive-ui';
-import { Github, Google, Facebook } from '@vicons/fa';
+import { Github, Google, Twitter } from '@vicons/fa';
 import { router } from '@/router';
 
 export default defineComponent({
@@ -72,7 +72,7 @@ export default defineComponent({
 		NIcon,
 		Github,
 		Google,
-		Facebook,
+		Twitter,
 	},
 	setup() {
 		const messageDuration = 5000;
@@ -128,45 +128,35 @@ export default defineComponent({
 			}
 		}
 
-		function unactivatedOAuth(provider?: string) {
-		  message.error('This OAuth method is not enabled. For display purposes only.', { duration: messageDuration });
+		function unactivatedOAuth() {
+			message.error('This OAuth method is not enabled. For display purposes only.', { duration: messageDuration });
 		}
-	
 
 		function handleValidateButtonClick(e: any) {
-		  e.preventDefault();
-		
-		  if (formRef.value) {
-		    // Validate the form using formRef.value.validate()
-		    formRef.value.validate(async (error: any) => {
-		      if (!error) { // Form validation successful
-		        try {
-		          const credentials = {
-		            email: modelRef.value.email,
-		            password: modelRef.value.password,
-		          };
-		
-		          const { error, user } = await handleSignIn(credentials);
-		          if (error) throw error; // Re-throw any errors from handleSignIn
-		
-		          if (user) {
-		            router.push('/links'); // Redirect to links page on successful sign-in
-		          } else {
-		            // Handle other scenarios (e.g., magic link sent)
-		            message.success('Magic Link sent to your email!', { duration: messageDuration });
-		          }
-		        } catch (error) {
-		          message.error('Error signing in...', { duration: messageDuration });
-		        }
-		      } else {
-		        // Handle form validation errors
-		        message.error('Please confirm your sign in details...', { duration: messageDuration });
-		      }
-		    });
-		  }
+			e.preventDefault();
+			if (formRef.value) {
+				formRef.value.validate(async (error: any) => {
+					if (!error) {
+						try {
+							const { error, user } = await handleSignIn({
+								email: modelRef.value.email,
+								password: modelRef.value.password,
+							});
+							if (error) throw error;
+							if (user) {
+								router.push('/links');
+							} else {
+								message.success('Magic Link sent to your email!', { duration: messageDuration });
+							}
+						} catch (error) {
+							message.error('Error signing in...', { duration: messageDuration });
+						}
+					} else {
+						message.error('Please confirm your sign in details...', { duration: messageDuration });
+					}
+				});
+			}
 		}
-
-
 
 		return {
 			email,
