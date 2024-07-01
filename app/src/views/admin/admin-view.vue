@@ -36,7 +36,7 @@
 			<div class="footer">
 				<a href="https://opensource.org/licenses/MIT">MIT Licensed</a>. &copy;
 				{{ currentYear }}
-				<b><n-a href="https://github.com/sponsors/licitdev" target="_blank">licitdev</n-a></b>
+				<b><n-a href="https://github.com/sunainha-vijay" target="_blank">sunainha-vijay</n-a></b>
 			</div>
 		</template>
 	</n-page-header>
