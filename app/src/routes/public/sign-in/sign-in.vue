@@ -128,9 +128,10 @@ export default defineComponent({
 			}
 		}
 
-		function unactivatedOAuth() {
-			message.error('This OAuth method is not enabled. For display purposes only.', { duration: messageDuration });
+		function unactivatedOAuth(provider?: string) {
+		  message.error('This OAuth method is not enabled. For display purposes only.', { duration: messageDuration });
 		}
+	
 
 		function handleValidateButtonClick(e: any) {
 		  e.preventDefault();
