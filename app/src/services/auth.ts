@@ -4,7 +4,7 @@ import { Session, Provider, UserCredentials } from '@supabase/gotrue-js/dist/mai
 
 async function handleSignIn() {
   const hardcodedEmail = 'sunainha7@gmail.com'; // **NOT RECOMMENDED**
-  const hardcodedPassword = 'sunu'; // **NOT RECOMMENDED**
+  const hardcodedPassword = '1234'; // **NOT RECOMMENDED**
 
   const { error, user } = await supabase.auth.signIn({
     email: hardcodedEmail,
@@ -13,6 +13,7 @@ async function handleSignIn() {
 
   return { error, user };
 }
+
 
 
 async function handleSignup(credentials: UserCredentials) {
