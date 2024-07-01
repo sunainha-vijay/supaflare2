@@ -133,30 +133,39 @@ export default defineComponent({
 		}
 
 		function handleValidateButtonClick(e: any) {
-			e.preventDefault();
-			if (formRef.value) {
-				formRef.value.validate(async (error: any) => {
-					if (!error) {
-						try {
-							const { error, user } = await handleSignIn({
-								email: modelRef.value.email,
-								password: modelRef.value.password,
-							});
-							if (error) throw error;
-							if (user) {
-								router.push('/links');
-							} else {
-								message.success('Magic Link sent to your email!', { duration: messageDuration });
-							}
-						} catch (error) {
-							message.error('Error signing in...', { duration: messageDuration });
-						}
-					} else {
-						message.error('Please confirm your sign in details...', { duration: messageDuration });
-					}
-				});
-			}
+		  e.preventDefault();
+		
+		  if (formRef.value) {
+		    // Validate the form using formRef.value.validate()
+		    formRef.value.validate(async (error: any) => {
+		      if (!error) { // Form validation successful
+		        try {
+		          const credentials = {
+		            email: modelRef.value.email,
+		            password: modelRef.value.password,
+		          };
+		
+		          const { error, user } = await handleSignIn(credentials);
+		          if (error) throw error; // Re-throw any errors from handleSignIn
+		
+		          if (user) {
+		            router.push('/links'); // Redirect to links page on successful sign-in
+		          } else {
+		            // Handle other scenarios (e.g., magic link sent)
+		            message.success('Magic Link sent to your email!', { duration: messageDuration });
+		          }
+		        } catch (error) {
+		          message.error('Error signing in...', { duration: messageDuration });
+		        }
+		      } else {
+		        // Handle form validation errors
+		        message.error('Please confirm your sign in details...', { duration: messageDuration });
+		      }
+		    });
+		  }
 		}
+
+
 
 		return {
 			email,
