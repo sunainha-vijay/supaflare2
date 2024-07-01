@@ -23,6 +23,13 @@
 				</div>
 				<n-divider title-placement="left">Or continue with</n-divider>
 				<n-space justify="space-around">
+				    </n-space>
+				  <div style="text-align: center; margin-top: 20px;">
+				    <n-button type="text" @click="$router.push('/sign-up')">
+				      Sign Up
+				    </n-button>
+				  </div>
+				<n-space justify="space-around">
 					<n-button @click="oauthLogin('github')">
 						<template #icon>
 							<n-icon>
