@@ -2,17 +2,6 @@ import { ref } from 'vue';
 import { supabase } from '@/services/supabase';
 import { Session, Provider, UserCredentials } from '@supabase/gotrue-js/dist/main/lib/types';
 
-async function signUpNewUser() {
-  const { data, error } = await supabase.auth.signUp({
-    email: 'sunainha7@email.com',
-    password: '1234',
-    options: {
-      emailRedirectTo: 'https://supaflare2.pages.dev/links',
-    },
-  })
-}
-
-
 async function handleSignIn(credentials: UserCredentials) {
 	const { error, user } = await supabase.auth.signIn({
 		email: credentials.email,
@@ -22,15 +11,10 @@ async function handleSignIn(credentials: UserCredentials) {
 }
 
 async function handleSignup(credentials: UserCredentials) {
-  const { email, password } = credentials;
-  const { error } = await supabase.auth.signUp({ email, password });
-  if (error) return { error };
-
-  // Signup successful, display message or redirect
-  console.log("Signup successful! Please check your email to verify.");
-  return { error: null }; // Indicate successful signup
+	const { email, password } = credentials;
+	const { error } = await supabase.auth.signUp({ email, password });
+	return { error };
 }
-
 
 async function handleOAuthLogin(provider: Provider) {
 	const { error } = await supabase.auth.signIn({ provider });
