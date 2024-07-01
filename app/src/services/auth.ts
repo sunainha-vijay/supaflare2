@@ -2,19 +2,13 @@ import { ref } from 'vue';
 import { supabase } from '@/services/supabase';
 import { Session, Provider, UserCredentials } from '@supabase/gotrue-js/dist/main/lib/types';
 
-async function handleSignIn() {
-  const hardcodedEmail = 'sunainha7@gmail.com'; // **NOT RECOMMENDED**
-  const hardcodedPassword = '1234'; // **NOT RECOMMENDED**
-
-  const { error, user } = await supabase.auth.signIn({
-    email: hardcodedEmail,
-    password: hardcodedPassword,
-  });
-
-  return { error, user };
+async function handleSignIn(credentials: UserCredentials) {
+	const { error, user } = await supabase.auth.signIn({
+		email: credentials.email,
+		password: credentials.password,
+	});
+	return { error, user };
 }
-
-
 
 async function handleSignup(credentials: UserCredentials) {
 	const { email, password } = credentials;
