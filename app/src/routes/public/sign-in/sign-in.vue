@@ -3,6 +3,7 @@
 	<public-view>
 		<div id="content">
 			<n-form ref="formRef" :model="model" :rules="rules">
+				<h1>Welcome to our URL Shortener, TwistURL </h1>
 				<img class="logo" src="/supaflare.png" />
 				<h1>Sign In</h1>
 				<n-form-item path="email" label="Email">
