@@ -1,18 +1,10 @@
+// src/services/auth.ts
 
-import { ref } from 'vue';
+// Import UserCredentials type from your types file
+import { UserCredentials } from '@/types';
+
 import { supabase } from '@/services/supabase';
-import { Session, Provider, UserCredentials } from '@supabase/gotrue-js/dist/main/lib/types';
-import { UserCredentials } from '@/types'; // Import your UserCredentials type
-import { ApiError } from '@/types'; // Adjust this based on your actual error type
-
-async function handleSignIn(credentials: UserCredentials) {
-	const { error, user } = await supabase.auth.signIn({
-		email: credentials.email,
-		password: credentials.password,
-	});
-	return { error, user };
-}
-
+import { ApiError } from '@/types'; // Ensure ApiError is imported correctly from your types
 
 async function handleSignUp(credentials: UserCredentials) {
   const { email, password } = credentials;
@@ -28,34 +20,63 @@ async function handleSignUp(credentials: UserCredentials) {
   }
 }
 
+async function handleSignIn(credentials: UserCredentials) {
+  const { email, password } = credentials;
+  try {
+    const { error, user } = await supabase.auth.signIn({ email, password });
+    return { error, user }; // Return both error and user
+  } catch (error) {
+    console.error('Error signing in:', error);
+    return { error: error as ApiError }; // Return the error object
+  }
+}
 
-async function handleOAuthLogin(provider: Provider) {
-	const { error } = await supabase.auth.signIn({ provider });
-	return { error };
+async function handleOAuthLogin(provider: any) {
+  try {
+    const { error } = await supabase.auth.signIn({ provider });
+    return { error };
+  } catch (error) {
+    console.error(`Error authenticating with ${provider}:`, error);
+    return { error: error as ApiError };
+  }
 }
 
 async function handlePasswordReset(credentials: UserCredentials) {
-	const { email } = credentials;
-	const { error } = await supabase.auth.api.resetPasswordForEmail(String(email));
-	return { error };
+  const { email } = credentials;
+  try {
+    const { error } = await supabase.auth.api.resetPasswordForEmail(String(email));
+    return { error };
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    return { error: error as ApiError };
+  }
 }
 
 async function handleUpdateUser(credentials: UserCredentials) {
-	const { error } = await supabase.auth.update(credentials);
-
-	return { error };
+  try {
+    const { error } = await supabase.auth.update(credentials);
+    return { error };
+  } catch (error) {
+    console.error('Error updating user:', error);
+    return { error: error as ApiError };
+  }
 }
 
 async function handleSignOut() {
-	const { error } = await supabase.auth.signOut();
-	return { error };
+  try {
+    const { error } = await supabase.auth.signOut();
+    return { error };
+  } catch (error) {
+    console.error('Error signing out:', error);
+    return { error: error as ApiError };
+  }
 }
 
 export {
-	handleSignIn,
-	handleOAuthLogin,
-	handleSignUp,
-	handleSignOut,
-	handlePasswordReset,
-	handleUpdateUser,
+  handleSignIn,
+  handleSignUp,
+  handleSignOut,
+  handlePasswordReset,
+  handleOAuthLogin,
+  handleUpdateUser,
 };
