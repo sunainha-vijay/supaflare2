@@ -141,30 +141,34 @@ export default defineComponent({
 		}
 
 		function handleValidateButtonClick(e: any) {
-			e.preventDefault();
-			if (formRef.value) {
-				formRef.value.validate(async (error: any) => {
-					if (!error) {
-						try {
-							const { error, user } = await handleSignIn({
-								email: modelRef.value.email,
-								password: modelRef.value.password,
-							});
-							if (error) throw error;
-							if (user) {
-								router.push('/links');
-							} else {
-								message.success('Magic Link sent to your email!', { duration: messageDuration });
-							}
-						} catch (error) {
-							message.error('Error signing in...', { duration: messageDuration });
-						}
-					} else {
-						message.error('Please confirm your sign in details...', { duration: messageDuration });
-					}
-				});
-			}
+		  e.preventDefault();
+		
+		  if (formRef.value) {
+		    formRef.value.validate(async (error: any) => {
+		      if (!error) {
+		        try {
+		          const { error, user } = await handleSignIn({
+		            email: modelRef.value.email,
+		            password: modelRef.value.password,
+		          });
+		
+		          if (error) {
+		            throw new Error(error.message);
+		          }
+		
+		          if (user) {
+		            router.push('/success'); // Redirect to dashboard or home page
+		          }
+		        } catch (error) {
+		          message.error('Error signing in...', { duration: messageDuration });
+		        }
+		      } else {
+		        message.error('Please confirm your sign in details...', { duration: messageDuration });
+		      }
+		    });
+		  }
 		}
+
 
 		return {
 			email,
