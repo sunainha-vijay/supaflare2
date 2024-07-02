@@ -1,6 +1,6 @@
 <template>
   <public-view>
-    <div id="content">
+    <div id="content" style="background-color: #fff7ae;">
       <n-form ref="formRef" :model="model" :rules="rules">
         <img class="logo" src="/supaflare.png" />
         <h1>Sign Up</h1>
