@@ -22,8 +22,10 @@
 						<span v-else>Send Magic Link</span>
 					</n-button>
 				</div>
-				<n-divider title-placement="left">Don't have an account?  Sign-Up</n-divider>
-				<n-space justify="space-around">
+				 <n-divider title-placement="left">
+				          <router-link to="/signup">Don't have an account? Sign-Up</router-link>
+				</n-divider>
+				<n-space justify="space-around">	
 				<n-divider title-placement="left">Or continue with</n-divider>
 				<n-space justify="space-around">
 					<n-button @click="oauthLogin('github')">
