@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { useAppStore } from '@/stores/appStore';
 import { supabase } from '@/services/supabase';
-
+import SignUpRoute from '@/routes/public/sign-up';
 import SignInRoute from '@/routes/public/sign-in';
 
 const NotFoundRoute = () => import('@/routes/admin/not-found');
@@ -23,6 +23,14 @@ export const defaultRoutes: RouteRecordRaw[] = [
 			requiresAuth: false,
 		},
 	},
+	{
+		path: '/signup',
+		name: 'Sign Up',
+		component: SignUpRoute,
+		meta: {
+		       requiresAuth: false, // Adjust as needed
+		},
+	},	
 	{
 		path: '/dashboard',
 		name: 'Dashboard',
