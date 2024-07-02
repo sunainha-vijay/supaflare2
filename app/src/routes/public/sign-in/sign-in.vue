@@ -6,7 +6,7 @@
 			<n-form ref="formRef" :model="model" :rules="rules">
 				
 				<img class="logo" src="/supaflare.png" />
-				<h2>Welcome to our URL Shortener! T</h2>
+				<h2>Welcome to our URL Shortener!</h2>
 				<h2>TwistURL</h2>
 				<h1>Sign In</h1>
 				<n-form-item path="email" label="Email">
@@ -193,7 +193,8 @@ export default defineComponent({
   justify-content: center;
   height: 100%;
   text-align: center;
-  background-color: #f0f0f0; /* Light gray background */
+  background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+   /* Light gray background */
   background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%); /* Gradient background */
   background-size: cover; /* Cover entire container */
   background-repeat: no-repeat; /* No repeat */
@@ -202,7 +203,7 @@ export default defineComponent({
 
 form {
   width: 400px;
-  background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%); /* White background for form */
+  background-color: #ffffff;/* White background for form */
   border-radius: 10px; /* Rounded corners */
   padding: 20px; /* Padding inside form */
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
