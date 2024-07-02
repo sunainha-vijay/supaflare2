@@ -93,7 +93,7 @@ export default defineComponent({
               if (error) throw error;
               if (user) {
                 // Navigate to a success page or redirect as needed
-                router.push('/success');
+                router.push('/links')
               } else {
                 message.success('User signed up successfully!', { duration: messageDuration });
               }
