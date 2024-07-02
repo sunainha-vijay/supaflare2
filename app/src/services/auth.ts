@@ -1,5 +1,5 @@
 import { supabase } from '@/services/supabase';
-import { Provider, UserCredentials } from '@supabase/supabase-js';
+import { UserCredentials, Provider } from '@supabase/gotrue-js/dist/main/lib/types';
 
 async function handleSignIn(credentials: UserCredentials) {
     try {
@@ -16,10 +16,8 @@ async function handleSignIn(credentials: UserCredentials) {
 
 async function handleSignUp(credentials: UserCredentials) {
     try {
-        const { error, user } = await supabase.auth.signUp({
-            email: credentials.email,
-            password: credentials.password,
-        });
+        const { email, password } = credentials;
+        const { error, user } = await supabase.auth.signUp({ email, password });
         return { error, user };
     } catch (error) {
         console.error('Error signing up:', error.message);
@@ -32,14 +30,15 @@ async function handleOAuthLogin(provider: Provider) {
         const { error } = await supabase.auth.signIn({ provider });
         return { error };
     } catch (error) {
-        console.error(`Error logging in with ${provider}:`, error.message);
+        console.error('Error with OAuth login:', error.message);
         return { error: error.message };
     }
 }
 
 async function handlePasswordReset(credentials: UserCredentials) {
     try {
-        const { error } = await supabase.auth.api.resetPasswordForEmail(credentials.email);
+        const { email } = credentials;
+        const { error } = await supabase.auth.api.resetPasswordForEmail(String(email));
         return { error };
     } catch (error) {
         console.error('Error resetting password:', error.message);
