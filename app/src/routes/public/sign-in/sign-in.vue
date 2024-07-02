@@ -157,7 +157,7 @@ export default defineComponent({
 		          }
 		
 		          if (user) {
-		            router.push('/success'); // Redirect to dashboard or home page
+		            router.push('/links')// Redirect to dashboard or home page
 		          }
 		        } catch (error) {
 		          message.error('Error signing in...', { duration: messageDuration });
