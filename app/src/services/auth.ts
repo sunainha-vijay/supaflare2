@@ -11,9 +11,17 @@ async function handleSignIn(credentials: UserCredentials) {
 }
 
 async function handleSignUp(credentials: UserCredentials) {
-	const { email, password } = credentials;
-	const { error } = await supabase.auth.signUp({ email, password });
-	return { error };
+    const { email, password } = credentials;
+    try {
+        const { error, user } = await supabase.auth.signUp({ email, password });
+        if (error) {
+            throw error;
+        }
+        return { error: null, user };
+    } catch (error) {
+        console.error('Error signing up:', error.message);
+        return { error: error.message, user: null };
+    }
 }
 
 async function handleOAuthLogin(provider: Provider) {
