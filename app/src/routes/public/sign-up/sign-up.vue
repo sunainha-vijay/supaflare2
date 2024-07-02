@@ -27,7 +27,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useMessage, NForm, NFormItem, NInput, NButton, NDivider } from 'naive-ui';
-import { handleSignUp } from '@/services/auth'; // Import your sign-up function if available
+import { handleSignup } from '@/services/auth'; // Import your sign-up function if available
 import { router } from '@/router';
 
 export default defineComponent({
