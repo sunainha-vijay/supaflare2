@@ -6,8 +6,7 @@
 			<n-form ref="formRef" :model="model" :rules="rules">
 				
 				<img class="logo" src="/supaflare.png" />
-				<h2>Welcome to our URL Shortener! </h2>
-				<h1>Twist URL title-placement="center"</h1>
+				<h2>Welcome to our URL Shortener! TwistURL</h2>
 				<h1>Sign In</h1>
 				<n-form-item path="email" label="Email">
 					<n-input v-model:value="model.email" placeholder="Enter Email" @keydown.enter="handleValidateButtonClick" />
