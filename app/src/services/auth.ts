@@ -1,3 +1,4 @@
+
 import { ref } from 'vue';
 import { supabase } from '@/services/supabase';
 import { Session, Provider, UserCredentials } from '@supabase/gotrue-js/dist/main/lib/types';
