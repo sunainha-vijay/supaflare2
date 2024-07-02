@@ -203,7 +203,8 @@ export default defineComponent({
 
 form {
   width: 400px;
-  background-color: #ffffff;/* White background for form */
+  background-color: #a1c4fd;
+/* White background for form */
   border-radius: 10px; /* Rounded corners */
   padding: 20px; /* Padding inside form */
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
