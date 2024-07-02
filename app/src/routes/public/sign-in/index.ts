@@ -1,5 +1,7 @@
-import SignInRoute from './sign-in.vue';
+// import SignInRoute from './sign-in.vue';
 
+// export { SignInRoute };
+// export default SignInRoute;
 export { SignInRoute };
 export default SignInRoute;
 // import SignInRoute from './sign-in.vue';
