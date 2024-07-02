@@ -36,7 +36,7 @@
 						</template>
 						GitHub
 					</n-button>
-					<n-button @click="click="oauthLogin('google')">
+					<n-button @click="oauthLogin('google')">
 						<template #icon>
 							<n-icon>
 								<google />
