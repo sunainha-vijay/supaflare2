@@ -2,6 +2,8 @@
 import { ref } from 'vue';
 import { supabase } from '@/services/supabase';
 import { Session, Provider, UserCredentials } from '@supabase/gotrue-js/dist/main/lib/types';
+import { UserCredentials } from '@/types'; // Import your UserCredentials type
+import { ApiError } from '@/types'; // Adjust this based on your actual error type
 
 async function handleSignIn(credentials: UserCredentials) {
 	const { error, user } = await supabase.auth.signIn({
@@ -11,11 +13,21 @@ async function handleSignIn(credentials: UserCredentials) {
 	return { error, user };
 }
 
+
 async function handleSignUp(credentials: UserCredentials) {
-	const { email, password } = credentials;
-	const { error } = await supabase.auth.signUp({ email, password });
-	return { error };
+  const { email, password } = credentials;
+  try {
+    const { error, user } = await supabase.auth.signUp({ email, password });
+    if (error) {
+      throw new Error(error.message); // Throw an error if sign up fails
+    }
+    return { user }; // Return the user object if sign up is successful
+  } catch (error) {
+    console.error('Error signing up:', error);
+    return { error: error as ApiError }; // Return the error object
+  }
 }
+
 
 async function handleOAuthLogin(provider: Provider) {
 	const { error } = await supabase.auth.signIn({ provider });
