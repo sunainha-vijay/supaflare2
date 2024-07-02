@@ -25,7 +25,7 @@
 				 <n-divider title-placement="left">
 				          <router-link to="/signup">Don't have an account? Sign-Up</router-link>
 				</n-divider>
-				<n-space justify="space-around">	
+					
 				<n-divider title-placement="left">Or continue with</n-divider>
 				<n-space justify="space-around">
 					<n-button @click="oauthLogin('github')">
