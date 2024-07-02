@@ -186,27 +186,54 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.logo {
-	width: 300px;
-	margin-bottom: 50px;
-}
 #content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 100%;
-	text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  background-color: #f0f0f0; /* Light gray background */
+  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%); /* Gradient background */
+  background-size: cover; /* Cover entire container */
+  background-repeat: no-repeat; /* No repeat */
+  padding: 20px; /* Padding for content */
 }
 
 form {
-	width: 400px;
+  width: 400px;
+  background-color: #ffffff; /* White background for form */
+  border-radius: 10px; /* Rounded corners */
+  padding: 20px; /* Padding inside form */
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
 }
+
+.logo {
+  width: 300px;
+  margin-bottom: 20px; /* Adjusted margin */
+}
+
 input {
-	text-align: center;
-	font-size: 20px;
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 5px; /* Rounded input fields */
+  padding: 10px; /* Padding inside inputs */
 }
+
 h1 {
-	text-align: left;
+  text-align: left;
+  font-size: 24px; /* Larger font size */
+  margin-bottom: 10px; /* Adjusted margin */
+}
+
+h2 {
+  font-size: 20px; /* Larger font size */
+  margin-bottom: 20px; /* Adjusted margin */
+}
+
+.n-space {
+  margin-top: 20px; /* Space between buttons and other content */
 }
 </style>
+
 
