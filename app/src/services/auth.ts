@@ -15,12 +15,17 @@ async function handleSignUp(credentials: UserCredentials) {
     try {
         const { error, user } = await supabase.auth.signUp({ email, password });
         if (error) {
-            throw error;
+            throw new Error(error.message); // Throw a new Error object with the error message
         }
         return { error: null, user };
-    } catch (error) {
-        console.error('Error signing up:', error.message);
-        return { error: error.message, user: null };
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            console.error('Error signing up:', err.message);
+            return { error: err.message, user: null };
+        } else {
+            console.error('Unknown error:', err);
+            return { error: 'Unknown error occurred', user: null };
+        }
     }
 }
 
