@@ -1,12 +1,23 @@
-import { defineStore } from 'pinia';
-import { Session } from '@supabase/gotrue-js/dist/main/lib/types';
-import { ref } from 'vue';
 
-export const useAppStore = defineStore('appStore', {
+import { defineStore } from 'pinia';
+import { Link } from '@/types/global';
+
+export const useLinksStore = defineStore('linksStore', {
 	state: () => {
+		const links: Link[] = [];
 		return {
-			initialURL: ref(''),
-			supabaseSession: ref<Session | null>(null),
+			links,
 		};
+	},
+	actions: {
+		addLink(link: Link) {
+			this.links.push(link as never);
+		},
+		updateLinks(links: Link[]) {
+			this.links = links;
+		},
+		deleteLink(id: string) {
+			this.links = this.links.filter(link => link.id !== id);
+		},
 	},
 });
