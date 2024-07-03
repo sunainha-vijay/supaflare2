@@ -1,72 +1,36 @@
 <template>
   <admin-view>
     <h1>Dashboard</h1>
-    <div v-if="loading">
-      <p>Loading...</p>
-    </div>
-    <div v-else>
-      <h2>Your Links</h2>
-      <ul>
-        <li v-for="link in links" :key="link.id">
-          <!-- <p>{{ link.title }}</p> --> <!-- Comment out or remove this line -->
-          <p>Original URL: <a :href="link.url" target="_blank">{{ link.url }}</a></p>
-          <p>Shortened URL: <a :href="getShortUrl(link)" target="_blank">{{ getShortUrl(link) }}</a></p>
-          <button @click="deleteLink(link)">Delete</button>
-        </li>
-      </ul>
-    </div>
+    <table id="urls">
+      <thead>
+        <tr>
+          <th>Short URL</th>
+          <th>Original URL</th>
+          <th>Slug</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="url in urls" :key="url.id">
+          <td><a :href="'https://supaflare2.pages.dev/' + url.slug" target="_blank">https://supaflare2.pages.dev/{{ url.slug }}</a></td>
+          <td>{{ url.original_url }}</td>
+          <td>{{ url.slug }}</td>
+        </tr>
+      </tbody>
+    </table>
   </admin-view>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
-import { fetchLinks, deleteLink } from '@/services/links';
-import { Link } from '@/types/global'; // Adjust path as per your setup
+import { defineComponent } from 'vue';
+import { useUrls } from '../composables/useUrls';
 
 export default defineComponent({
-  name: 'Dashboard',
+  components: {},
   setup() {
-    const links = ref<Link[]>([]);
-    const loading = ref<boolean>(true);
-
-    const loadLinks = async () => {
-      try {
-        const { data, error } = await fetchLinks();
-        if (error) {
-          console.error('Error fetching links:', error);
-          return;
-        }
-        links.value = data || []; // Initialize links with fetched data or empty array
-      } catch (error) {
-        console.error('Error loading links:', error);
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    const deleteLinkHandler = async (link: Link) => {
-      try {
-        await deleteLink(link);
-        await loadLinks(); // Reload links after deletion
-      } catch (error) {
-        console.error('Error deleting link:', error);
-      }
-    };
-
-    const getShortUrl = (link: Link): string => {
-      const baseUrl = 'https://yourdomain.com/'; // Replace with your actual domain
-      return `${baseUrl}${link.slug}`;
-    };
-
-    onMounted(() => {
-      loadLinks();
-    });
+    const { urls } = useUrls();
 
     return {
-      links,
-      loading,
-      deleteLink: deleteLinkHandler,
-      getShortUrl,
+      urls,
     };
   },
 });
