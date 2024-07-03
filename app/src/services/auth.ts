@@ -11,7 +11,7 @@ async function handleSignIn(credentials: UserCredentials) {
 	return { error, user };
 }
 
-async function handleSignup(credentials: UserCredentials) {
+async function handleSignUp(credentials: UserCredentials) {
 	const { email, password } = credentials;
 	const { error } = await supabase.auth.signUp({ email, password });
 	return { error };
@@ -42,7 +42,7 @@ async function handleSignOut() {
 export {
 	handleSignIn,
 	handleOAuthLogin,
-	handleSignup,
+	handleSignUp,
 	handleSignOut,
 	handlePasswordReset,
 	handleUpdateUser,
