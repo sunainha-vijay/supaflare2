@@ -35,7 +35,7 @@ async function addLink(link: Link) {
     }
 
     // Generate the shortened URL
-    const shortUrl = `https://your-domain.com/${insertedLink.slug}`; // Replace with your actual domain
+    const shortUrl = `https://supaflare2.pages.dev/${insertedLink.slug}`; // Replace with your actual domain
 
     // Update the link with the shortened URL
     await supabase.from('links').update({ shortUrl }).eq('id', insertedLink.id).single();
