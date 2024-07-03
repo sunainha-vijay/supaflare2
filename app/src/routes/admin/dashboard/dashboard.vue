@@ -8,9 +8,9 @@
       <h2>Your Links</h2>
       <ul>
         <li v-for="link in links" :key="link.id">
-          <p>{{ link.title }}</p>
-          <p>Original URL: <a :href="link.originalUrl" target="_blank">{{ link.originalUrl }}</a></p>
-          <p>Shortened URL: <a :href="link.shortUrl" target="_blank">{{ link.shortUrl }}</a></p>
+          <p>{{ link.title }}</p> <!-- Example of accessing link properties -->
+          <p>Original URL: <a :href="link.url" target="_blank">{{ link.url }}</a></p>
+          <p>Shortened URL: <a :href="getShortUrl(link)" target="_blank">{{ getShortUrl(link) }}</a></p>
           <button @click="deleteLink(link)">Delete</button>
         </li>
       </ul>
@@ -21,16 +21,16 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 import { fetchLinks, deleteLink } from '@/services/links';
-import { Link } from '@/types/global'; // Adjust for your specific global types
+import { Link } from '@/types/global'; // Adjust path as per your setup
 
 export default defineComponent({
   name: 'Dashboard',
   components: {
-    // Add any necessary components here
+    // Import necessary components
   },
   setup() {
     const links = ref<Link[]>([]);
-    const loading = ref<boolean>(true); // Flag to indicate loading state
+    const loading = ref<boolean>(true);
 
     const loadLinks = async () => {
       try {
@@ -39,14 +39,11 @@ export default defineComponent({
           console.error('Error fetching links:', error);
           return;
         }
-        links.value = data.map((link: Link) => ({
-          ...link,
-          shortUrl: `https://supaflare2.pages.dev/${link.slug}`, // Replace with your actual domain
-        }));
+        links.value = data || []; // Initialize links with fetched data or empty array
       } catch (error) {
         console.error('Error loading links:', error);
       } finally {
-        loading.value = false; // Update loading state after fetching links
+        loading.value = false;
       }
     };
 
@@ -59,6 +56,10 @@ export default defineComponent({
       }
     };
 
+    const getShortUrl = (link: Link): string => {
+      return `https://supaflare2.pages.dev/${link.slug}`; // Adjust with your actual domain
+    };
+
     onMounted(() => {
       loadLinks();
     });
@@ -67,6 +68,7 @@ export default defineComponent({
       links,
       loading,
       deleteLink: deleteLinkHandler,
+      getShortUrl,
     };
   },
 });
