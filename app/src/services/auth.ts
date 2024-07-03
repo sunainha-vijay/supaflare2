@@ -1,50 +1,49 @@
 
+import { ref } from 'vue';
 import { supabase } from '@/services/supabase';
-import { Link } from '@/types/global';
-import axios, { Axios } from 'axios';
-import { useAppStore } from '@/stores/appStore';
+import { Session, Provider, UserCredentials } from '@supabase/gotrue-js/dist/main/lib/types';
 
-const supaflareWorkerUpdateURL = import.meta.env.VITE_SUPAFLARE_WORKER_URL + '/supaflare_cfw_update';
-const appStore = useAppStore();
-
-const options = {
-	headers: {
-		'content-type': 'application/json',
-	},
-};
-
-async function fetchLinks() {
-	const { data, error } = await supabase.from('links').select('*').order('inserted_at', { ascending: false });
-	return { data, error };
+async function handleSignIn(credentials: UserCredentials) {
+	const { error, user } = await supabase.auth.signIn({
+		email: credentials.email,
+		password: credentials.password,
+	});
+	return { error, user };
 }
 
-async function addLink(link: Link) {
-	const { data, error } = await supabase.from('links').insert(link).single();
-	await axios.post(
-		supaflareWorkerUpdateURL,
-		{ token: appStore.supabaseSession!.access_token, link_id: data.id },
-		options
-	);
-	return { data, error };
-}
-
-async function editLink(link: Link, edits: any) {
-	const { error } = await supabase.from('links').update(edits).eq('id', link.id).single();
-	await axios.post(
-		supaflareWorkerUpdateURL,
-		{ token: appStore.supabaseSession!.access_token, link_id: link.id },
-		options
-	);
+async function handleSignup(credentials: UserCredentials) {
+	const { email, password } = credentials;
+	const { error } = await supabase.auth.signUp({ email, password });
 	return { error };
 }
 
-async function deleteLink(link: Link) {
-	await supabase.from('links').delete().eq('id', link.id);
-	await axios.post(
-		supaflareWorkerUpdateURL,
-		{ token: appStore.supabaseSession!.access_token, link_id: link.id, slug: link.slug },
-		options
-	);
+async function handleOAuthLogin(provider: Provider) {
+	const { error } = await supabase.auth.signIn({ provider });
+	return { error };
 }
 
-export { fetchLinks, addLink, editLink, deleteLink };
+async function handlePasswordReset(credentials: UserCredentials) {
+	const { email } = credentials;
+	const { error } = await supabase.auth.api.resetPasswordForEmail(String(email));
+	return { error };
+}
+
+async function handleUpdateUser(credentials: UserCredentials) {
+	const { error } = await supabase.auth.update(credentials);
+
+	return { error };
+}
+
+async function handleSignOut() {
+	const { error } = await supabase.auth.signOut();
+	return { error };
+}
+
+export {
+	handleSignIn,
+	handleOAuthLogin,
+	handleSignup,
+	handleSignOut,
+	handlePasswordReset,
+	handleUpdateUser,
+};
