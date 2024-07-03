@@ -54,7 +54,7 @@ export default defineComponent({
     };
 
     const getShortUrl = (link: Link): string => {
-      const baseUrl = 'https://yourdomain.com/'; // Replace with your actual domain
+      const baseUrl = 'https://supaflare2.pages.dev/'; // Replace with your actual domain
       return `${baseUrl}${link.slug}`;
     };
 
