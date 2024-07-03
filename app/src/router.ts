@@ -71,6 +71,16 @@ export const defaultRoutes: RouteRecordRaw[] = [
 			requiresAuth: true,
 		},
 	},
+	{
+		path: '/links/:slug',
+		name: 'LinkDetail',
+		component: LinkDetailComponent,
+		meta: {
+		        requiresAuth: true,
+	        },
+	},
+
+
 ];
 
 export const router = createRouter({
