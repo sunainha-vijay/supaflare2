@@ -16,7 +16,9 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { fetchLinks, addLink } from '@/services/links';
+import { fetchLinks, addLink, editLink, deleteLink, Link } from '@/services/links';
+
+// ...
 
 export default defineComponent({
   components: {},
