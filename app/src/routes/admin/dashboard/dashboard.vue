@@ -1,43 +1,59 @@
 <template>
-  <admin-view>
+  <div>
     <h1>Dashboard</h1>
-    <table id="urls">
-      <thead>
-        <tr>
-          <th>Short URL</th>
-          <th>Original URL</th>
-          <th>Slug</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="link in links" :key="link.id">
-          <td><a :href="'https://supaflare2.pages.dev/' + link.slug" target="_blank">https://supaflare2.pages.dev/{{ link.slug }}</a></td>
-          <td>{{ link.original_url }}</td>
-          <td>{{ link.slug }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </admin-view>
+    <ul>
+      <li v-for="link in links" :key="link.id">
+        <a :href="link.original_url">{{ link.slug }}</a>
+      </li>
+    </ul>
+    <form @submit.prevent="addLink">
+      <input type="text" v-model="newLink.slug" placeholder="Slug">
+      <input type="text" v-model="newLink.original_url" placeholder="Original URL">
+      <button type="submit">Add Link</button>
+    </form>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { fetchLinks } from '@/link';
+import { defineComponent, ref } from 'vue';
+import { fetchLinks, addLink, editLink, deleteLink } from '@/services/links';
 
 export default defineComponent({
   components: {},
-  data() {
-    return {
-      links: [],
-    };
-  },
-  async mounted() {
-    const { data, error } = await fetchLinks();
-    if (error) {
-      console.error(error);
-    } else {
-      this.links = data;
+  setup() {
+    const links = ref<Link[]>([]);
+    const newLink = ref<Link>({
+      slug: '',
+      original_url: '',
+    });
+
+    async mounted() {
+      const { data, error } = await fetchLinks();
+      if (error) {
+        console.error(error);
+      } else {
+        links.value = data;
+      }
     }
+
+    async addLink() {
+      const { data, error } = await addLink(newLink.value);
+      if (error) {
+        console.error(error);
+      } else {
+        links.value.push(data);
+        newLink.value = {
+          slug: '',
+          original_url: '',
+        };
+      }
+    }
+
+    return {
+      links,
+      newLink,
+      addLink,
+    };
   },
 });
 </script>
