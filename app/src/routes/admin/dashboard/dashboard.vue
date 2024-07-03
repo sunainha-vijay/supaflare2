@@ -25,9 +25,6 @@ import { Link } from '@/types/global'; // Adjust path as per your setup
 
 export default defineComponent({
   name: 'Dashboard',
-  components: {
-    // Import necessary components
-  },
   setup() {
     const links = ref<Link[]>([]);
     const loading = ref<boolean>(true);
@@ -57,7 +54,8 @@ export default defineComponent({
     };
 
     const getShortUrl = (link: Link): string => {
-      return `https://supaflare2.pages.dev/${link.slug}`; // Adjust with your actual domain
+      const baseUrl = 'https://supaflare2.pages.dev/'; // Replace with your actual domain
+      return `${baseUrl}${link.slug}`;
     };
 
     onMounted(() => {
