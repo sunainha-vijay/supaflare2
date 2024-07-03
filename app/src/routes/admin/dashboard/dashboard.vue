@@ -8,7 +8,7 @@
       <h2>Your Links</h2>
       <ul>
         <li v-for="link in links" :key="link.id">
-          <p>{{ link.title }}</p>
+          <!-- <p>{{ link.title }}</p> --> <!-- Comment out or remove this line -->
           <p>Original URL: <a :href="link.url" target="_blank">{{ link.url }}</a></p>
           <p>Shortened URL: <a :href="getShortUrl(link)" target="_blank">{{ getShortUrl(link) }}</a></p>
           <button @click="deleteLink(link)">Delete</button>
@@ -54,7 +54,7 @@ export default defineComponent({
     };
 
     const getShortUrl = (link: Link): string => {
-      const baseUrl = 'https://supaflare2.pages.dev/'; // Replace with your actual domain
+      const baseUrl = 'https://yourdomain.com/'; // Replace with your actual domain
       return `${baseUrl}${link.slug}`;
     };
 
