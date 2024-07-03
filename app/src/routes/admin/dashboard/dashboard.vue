@@ -16,38 +16,34 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { fetchLinks, addLink, editLink, deleteLink } from '@/services/links';
+import { fetchLinks, addLink, Link } from '@/services/links'; // Ensure Link type is imported correctly
 
 export default defineComponent({
-  components: {},
   setup() {
-    const links = ref<Link[]>([]);
-    const newLink = ref<Link>({
-      slug: '',
-      original_url: '',
-    });
+    const links = ref<Link[]>([]); // Initialize ref for links
+    const newLink = ref<Link>({ slug: '', original_url: '' }); // Initialize ref for newLink
 
-    async mounted() {
+    const fetchLinksData = async () => {
       const { data, error } = await fetchLinks();
       if (error) {
         console.error(error);
       } else {
         links.value = data;
       }
-    }
+    };
 
-    async addLink() {
+    const addLink = async () => {
       const { data, error } = await addLink(newLink.value);
       if (error) {
         console.error(error);
       } else {
         links.value.push(data);
-        newLink.value = {
-          slug: '',
-          original_url: '',
-        };
+        newLink.value = { slug: '', original_url: '' };
       }
-    }
+    };
+
+    // Fetch data on component mount
+    fetchLinksData();
 
     return {
       links,
