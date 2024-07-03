@@ -10,10 +10,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="url in urls" :key="url.id">
-          <td><a :href="'https://supaflare2.pages.dev/' + url.slug" target="_blank">https://supaflare2.pages.dev/{{ url.slug }}</a></td>
-          <td>{{ url.original_url }}</td>
-          <td>{{ url.slug }}</td>
+        <tr v-for="link in links" :key="link.id">
+          <td><a :href="'https://supaflare2.pages.dev/' + link.slug" target="_blank">https://supaflare2.pages.dev/{{ link.slug }}</a></td>
+          <td>{{ link.original_url }}</td>
+          <td>{{ link.slug }}</td>
         </tr>
       </tbody>
     </table>
@@ -22,16 +22,22 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { useUrls } from '../composables/useUrls';
+import { fetchLinks } from '@/link';
 
 export default defineComponent({
   components: {},
-  setup() {
-    const { urls } = useUrls();
-
+  data() {
     return {
-      urls,
+      links: [],
     };
+  },
+  async mounted() {
+    const { data, error } = await fetchLinks();
+    if (error) {
+      console.error(error);
+    } else {
+      this.links = data;
+    }
   },
 });
 </script>
