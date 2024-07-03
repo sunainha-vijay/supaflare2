@@ -12,9 +12,22 @@ async function handleSignIn(credentials: UserCredentials) {
 }
 
 async function handleSignUp(credentials: UserCredentials) {
-	const { email, password } = credentials;
-	const { error } = await supabase.auth.signUp({ email, password });
-	return { error };
+    const { email, password } = credentials;
+    try {
+        const { error, user } = await supabase.auth.signUp({ email, password });
+        if (error) {
+            throw new Error(error.message); // Throw a new Error object with the error message
+        }
+        return { error: null, user };
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            console.error('Error signing up:', err.message);
+            return { error: err.message, user: null };
+        } else {
+            console.error('Unknown error:', err);
+            return { error: 'Unknown error occurred', user: null };
+        }
+    }
 }
 
 async function handleOAuthLogin(provider: Provider) {
