@@ -307,10 +307,17 @@ export default defineComponent({
 				},
 			},
 			{
-				title: 'Slug',
-				key: 'slug',
+				title: 'Short URL',
+				key: 'short_url',
 				render(row: any) {
-					return h('b', {}, { default: () => '/' + row.slug });
+					return h(
+						'a',
+						{
+							href: `https://supaflare-worker.sunainhavijay.workers.dev/${row.slug}`,
+							target: '_blank',
+						},
+						{ default: () => `https://supaflare-worker.sunainhavijay.workers.dev/${row.slug}` }
+					);
 				},
 			},
 			{
@@ -388,167 +395,72 @@ export default defineComponent({
 			},
 		});
 
-		getLatestLinks();
-
-		async function getLatestLinks() {
+		onMounted(async () => {
 			try {
-				const { data, error } = await fetchLinks();
-				if (error) throw error;
-				linksStore.updateLinks(data || []);
+				const data = await fetchLinks();
+				links.value = data;
+				linksStore.setLinks(data);
 			} catch (error) {
-				message.error('Error fetching links...', { duration: messageDuration });
-			}
-		}
-
-		function query() {
-			return new Promise((resolve) => {
-				(async () => {
-					await getLatestLinks();
-					resolve({});
-				})();
-			});
-		}
-
-		onMounted(() => {
-			query().then(() => {
-				links.value = linksStore.links;
+				message.error('Failed to fetch links');
+			} finally {
 				loadingRef.value = false;
-			});
+			}
 		});
 
 		function handleEditLink(row: any) {
 			editRowRef.value = row;
-			modelRef.value.id = row.id;
-			modelRef.value.slug = row.slug;
-
-			if (row.url) {
-				const fields = String(row.url).split('://');
-				modelRef.value.url_raw = [fields[0], fields.slice(1).join('://')];
-			} else {
-				modelRef.value.url_raw = ['', ''];
-			}
-			if (row.meta.android_url) {
-				const fields = String(row.meta.android_url).split('://');
-				modelRef.value.android_url_raw = [fields[0], fields.slice(1).join('://')];
-			} else {
-				modelRef.value.android_url_raw = ['', ''];
-			}
-			if (row.meta.ios_url) {
-				const fields = String(row.meta.ios_url).split('://');
-				modelRef.value.ios_url_raw = [fields[0], fields.slice(1).join('://')];
-			} else {
-				modelRef.value.ios_url_raw = ['', ''];
-			}
-
+			modelRef.value = {
+				url: row.url,
+				url_raw: row.url.split('://'),
+				slug: row.slug,
+				android_url: row.meta.android_url,
+				android_url_raw: row.meta.android_url.split('://'),
+				ios_url: row.meta.ios_url,
+				ios_url_raw: row.meta.ios_url.split('://'),
+			};
 			showEditModal.value = true;
 		}
 
-		function handleDeleteLink(row: any) {
-			dialog.warning({
-				title: 'Confirm Delete Link',
-				content: 'Are you sure you want to delete this link with slug of "' + row.slug + '"?',
-				positiveText: 'Confirm',
-				negativeText: 'Cancel',
-				onPositiveClick: async () => {
-					performDeleteLink(row);
-				},
-				onNegativeClick: () => {
-					return;
-				},
+		async function handleDeleteLink(row: any) {
+			const { value } = await dialog.warning({
+				title: 'Are you sure you want to delete this link?',
+				content: 'This action cannot be undone.',
 			});
-		}
-
-		async function performDeleteLink(row: any) {
+			if (!value) return;
 			try {
-				loadingRef.value = true;
-				await deleteLink(row);
-				linksStore.deleteLink(row);
+				await deleteLink(row.id);
 				links.value = links.value.filter((link) => link.id !== row.id);
+				linksStore.setLinks(links.value);
+				message.success('Link deleted successfully!', { duration: messageDuration });
 			} catch (error) {
-				message.error('Error deleting link...', { duration: messageDuration });
-			} finally {
-				loadingRef.value = false;
-				message.success('Link successfully deleted!');
-			}
-		}
-
-		function handleUrlUpdate(val: any) {
-			if (String(val[0]).includes('://')) {
-				const splits = String(val[0]).split('://');
-				if (splits.length > 1) {
-					modelRef.value.url_raw[0] = splits[0];
-					modelRef.value.url_raw[1] = splits.slice(1).join('://');
-				}
-			} else if (String(val[1]).includes('://')) {
-				const splits = String(val[1]).split('://');
-				if (splits.length > 1) {
-					if (!val[0] || val[0] === splits[0]) {
-						modelRef.value.url_raw[0] = splits[0];
-						modelRef.value.url_raw[1] = splits.slice(1).join('://');
-					}
-				}
-			}
-		}
-
-		function handleAndroidUrlUpdate(val: any) {
-			if (String(val[0]).includes('://')) {
-				const splits = String(val[0]).split('://');
-				if (splits.length > 1) {
-					modelRef.value.android_url_raw[0] = splits[0];
-					modelRef.value.android_url_raw[1] = splits.slice(1).join('://');
-				}
-			} else if (String(val[1]).includes('://')) {
-				const splits = String(val[1]).split('://');
-				if (splits.length > 1) {
-					if (!val[0] || val[0] === splits[0]) {
-						modelRef.value.android_url_raw[0] = splits[0];
-						modelRef.value.android_url_raw[1] = splits.slice(1).join('://');
-					}
-				}
-			}
-		}
-
-		function handleIosUrlUpdate(val: any) {
-			if (String(val[0]).includes('://')) {
-				const splits = String(val[0]).split('://');
-				if (splits.length > 1) {
-					modelRef.value.ios_url_raw[0] = splits[0];
-					modelRef.value.ios_url_raw[1] = splits.slice(1).join('://');
-				}
-			} else if (String(val[1]).includes('://')) {
-				const splits = String(val[1]).split('://');
-				if (splits.length > 1) {
-					if (!val[0] || val[0] === splits[0]) {
-						modelRef.value.ios_url_raw[0] = splits[0];
-						modelRef.value.ios_url_raw[1] = splits.slice(1).join('://');
-					}
-				}
+				message.error('Failed to delete link');
 			}
 		}
 
 		return {
-			slugRef,
-			formRef,
-			tableRef,
-			loadingRef,
-			rowKey,
 			columns,
 			links,
-			pagination: paginationReactive,
+			loadingRef,
+			linksStore,
 			showEditModal,
-			model: modelRef,
-			rules,
 			showLoadingSpinner,
-			handleGenerateSlug,
-			handleEditLink,
 			handleSaveEdits,
-			handleUrlUpdate,
-			handleAndroidUrlUpdate,
-			handleIosUrlUpdate,
+			modelRef,
+			rules,
+			formRef,
+			handleGenerateSlug,
+			slugRef,
+			paginationReactive,
+			tableRef,
+			rowKey,
+			handleEditLink,
+			handleDeleteLink,
 		};
 	},
 });
 </script>
+
+
 
 <style scoped>
 .centered-view {
