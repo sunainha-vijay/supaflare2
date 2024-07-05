@@ -77,6 +77,7 @@ export default defineComponent({
             ios_url_raw: ['', ''],
             start_date: null, // Initialize start_date and end_date as null
             end_date: null,
+	
         });
 
         const rules = {
