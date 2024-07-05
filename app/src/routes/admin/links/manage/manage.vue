@@ -292,82 +292,90 @@ export default defineComponent({
 		}
 
 		const columns: any = [
-			{
-				title: 'URL',
-				key: 'url',
-				render(row: any) {
-					return h(
-						'a',
-						{
-							href: row.url,
-							target: '_blank',
-						},
-						{ default: () => row.url }
-					);
-				},
-			},
-			{
-				title: 'Slug',
-				key: 'slug',
-				render(row: any) {
-					return h('b', {}, { default: () => '/' + row.slug });
-				},
-			},
-			{
-				title: 'Android URL',
-				key: 'meta.android_url',
-				render(row: any) {
-					return h(
-						'a',
-						{
-							href: row.meta.android_url,
-							target: '_blank',
-						},
-						{ default: () => row.meta.android_url }
-					);
-				},
-			},
-			{
-				title: 'iOS URL',
-				key: 'meta.ios_url',
-				render(row: any) {
-					return h(
-						'a',
-						{
-							href: row.meta.ios_url,
-							target: '_blank',
-						},
-						{ default: () => row.meta.ios_url }
-					);
-				},
-			},
-			{
-				title: 'Action',
-				key: 'actions',
-				width: '150px',
-				render(row: any) {
-					return h('div', [
-						h(
-							NButton,
-							{
-								size: 'small',
-								onClick: () => handleEditLink(row),
-							},
-							{ default: () => 'Edit' }
-						),
-						h(
-							NButton,
-							{
-								size: 'small',
-								type: 'error',
-								style: 'margin-left: 10px',
-								onClick: () => handleDeleteLink(row),
-							},
-							{ default: () => 'Delete' }
-						),
-					]);
-				},
-			},
+		    {
+		        title: 'URL',
+		        key: 'url',
+		        render(row: any) {
+		            return h(
+		                'a',
+		                {
+		                    href: row.url,
+		                    target: '_blank',
+		                },
+		                { default: () => row.url }
+		            );
+		        },
+		    },
+		    {
+		        title: 'Slug',
+		        key: 'slug',
+		        render(row: any) {
+		            const fullUrl = `https://supaflare-worker.sunainhavijay.workers.dev/${row.slug}`;
+		            return h(
+		                'a',
+		                {
+		                    href: fullUrl,
+		                    target: '_blank',
+		                },
+		                { default: () => fullUrl }
+		            );
+		        },
+		    },
+		    {
+		        title: 'Android URL',
+		        key: 'meta.android_url',
+		        render(row: any) {
+		            return h(
+		                'a',
+		                {
+		                    href: row.meta.android_url,
+		                    target: '_blank',
+		                },
+		                { default: () => row.meta.android_url }
+		            );
+		        },
+		    },
+		    {
+		        title: 'iOS URL',
+		        key: 'meta.ios_url',
+		        render(row: any) {
+		            return h(
+		                'a',
+		                {
+		                    href: row.meta.ios_url,
+		                    target: '_blank',
+		                },
+		                { default: () => row.meta.ios_url }
+		            );
+		        },
+		    },
+		    {
+		        title: 'Action',
+		        key: 'actions',
+		        width: '150px',
+		        render(row: any) {
+		            return h('div', [
+		                h(
+		                    NButton,
+		                    {
+		                        size: 'small',
+		                        onClick: () => handleEditLink(row),
+		                    },
+		                    { default: () => 'Edit' }
+		                ),
+		                h(
+		                    NButton,
+		                    {
+		                        size: 'small',
+		                        type: 'error',
+		                        style: 'margin-left: 10px',
+		                        onClick: () => handleDeleteLink(row),
+		                    },
+		                    { default: () => 'Delete' }
+		                ),
+		            ]);
+		        },
+		    },
 		];
 
 		const rowKey = () => {
