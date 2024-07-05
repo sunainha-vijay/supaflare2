@@ -19,23 +19,23 @@ async function fetchLinks() {
 }
 
 async function addLink(link: Link) {
-	const { data, error } = await supabase.from('links').insert(link).single();
-	await axios.post(
-		supaflareWorkerUpdateURL,
-		{ token: appStore.supabaseSession!.access_token, link_id: data.id },
-		options
-	);
-	return { data, error };
+    const { data, error } = await supabase.from('links').insert(link).single();
+    await axios.post(
+        supaflareWorkerUpdateURL,
+        { token: appStore.supabaseSession!.access_token, link_id: data.id },
+        options
+    );
+    return { data, error };
 }
 
-async function editLink(link: Link, edits: any) {
-	const { error } = await supabase.from('links').update(edits).eq('id', link.id).single();
-	await axios.post(
-		supaflareWorkerUpdateURL,
-		{ token: appStore.supabaseSession!.access_token, link_id: link.id },
-		options
-	);
-	return { error };
+async function editLink(link: Link, edits: Partial<Link>) {
+    const { error } = await supabase.from('links').update(edits).eq('id', link.id).single();
+    await axios.post(
+        supaflareWorkerUpdateURL,
+        { token: appStore.supabaseSession!.access_token, link_id: link.id },
+        options
+    );
+    return { error };
 }
 
 async function deleteLink(link: Link) {
