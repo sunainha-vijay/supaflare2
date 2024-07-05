@@ -1,4 +1,5 @@
-export declare interface Link {
+// src/types/global.d.ts or wherever your types are defined
+export interface Link {
     id?: string;
     user_id: string;
     url: string;
@@ -9,6 +10,6 @@ export declare interface Link {
     };
     updated_at?: string;
     inserted_at?: string;
-    start_date?: string | null; // Adjust type to string or null
-    end_date?: string | null; // Adjust type to string or null
+    start_date?: string; // New property for start date
+    end_date?: string; // New property for end date
 }
