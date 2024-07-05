@@ -9,6 +9,6 @@ export declare interface Link {
     };
     updated_at?: string;
     inserted_at?: string;
-    start_date?: string; // New property for start date
-    end_date?: string; // New property for end date
+    start_date?: string | null; // Adjust type to string or null
+    end_date?: string | null; // Adjust type to string or null
 }
