@@ -311,7 +311,14 @@ export default defineComponent({
 		        key: 'slug',
 		        render(row: any) {
 		            const fullUrl = `https://supaflare-worker.sunainhavijay.workers.dev/${row.slug}`;
-		            return h('b', {}, { default: () => fullUrl });
+		            return h(
+		                'a',
+		                {
+		                    href: fullUrl,
+		                    target: '_blank',
+		                },
+		                { default: () => fullUrl }
+		            );
 		        },
 		    },
 		    {
