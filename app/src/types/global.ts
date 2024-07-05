@@ -1,5 +1,5 @@
 // src/types/global.d.ts or wherever your types are defined
-export interface Link {
+export declare interface Link {
     id?: string;
     user_id: string;
     url: string;
