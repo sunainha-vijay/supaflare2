@@ -1,4 +1,4 @@
-![supaflare_white_bg](https://user-images.githubusercontent.com/26413686/136743018-6f8923a6-8a3c-44f0-b6ec-b970a9f30b94.png)
+
 
 ##
 
