@@ -37,7 +37,6 @@ async function editLink(link: Link, edits: any) {
   return { error };
 }
 
-
 async function deleteLink(link: Link) {
   await supabase.from('links').delete().eq('id', link.id);
   await axios.post(
@@ -47,4 +46,9 @@ async function deleteLink(link: Link) {
   );
 }
 
-export { fetchLinks, addLink, editLink, deleteLink };
+async function fetchLinkBySlug(slug: string) {
+  const { data, error } = await supabase.from('links').select('*').eq('slug', slug).single();
+  return { data, error };
+}
+
+export { fetchLinks, addLink, editLink, deleteLink, fetchLinkBySlug };
