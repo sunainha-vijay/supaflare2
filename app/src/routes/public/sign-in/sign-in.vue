@@ -23,7 +23,7 @@
 				<div style="display: flex; justify-content: flex-end">
 					<n-button round type="primary" @click="handleValidateButtonClick">
 						<span v-if="model.password">Sign In</span>
-						<span v-else>Send Magic Link</span>
+						<span v-else>Sign In</span>
 					</n-button>
 				</div>
 				 <n-divider title-placement="left">
@@ -47,14 +47,6 @@
 							</n-icon>
 						</template>
 						Google
-					</n-button>
-					<n-button @click="unactivatedOAuth">
-						<template #icon>
-							<n-icon>
-								<Facebook />
-							</n-icon>
-						</template>
-						Facebook
 					</n-button>
 				</n-space>
 			</n-form>
