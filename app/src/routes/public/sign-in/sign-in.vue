@@ -1,180 +1,163 @@
-
-
 <template>
-	<public-view>
-		<div id="content">
-			<n-form ref="formRef" :model="model" :rules="rules">
-				
-				<img class="logo" src="/supaflare.png" />
-				<h2>Welcome to our URL Shortener!</h2>
-				<h2>TwistURL</h2>
-				<h1>Sign In</h1>
-				<n-form-item path="email" label="Email">
-					<n-input v-model:value="model.email" placeholder="Enter Email" @keydown.enter="handleValidateButtonClick" />
-				</n-form-item>
-				<n-form-item path="password" label="Password">
-					<n-input
-						v-model:value="model.password"
-						type="password"
-						placeholder="Enter Password"
-						@keydown.enter="handleValidateButtonClick"
-					/>
-				</n-form-item>
-				<div style="display: flex; justify-content: flex-end">
-					<n-button round type="primary" @click="handleValidateButtonClick">
-						<span v-if="model.password">Sign In</span>
-						<span v-else>Sign In</span>
-					</n-button>
-				</div>
-				 <n-divider title-placement="left">
-				          <router-link to="/signup">Don't have an account? Sign-Up</router-link>
-				</n-divider>
-					
-				<n-divider title-placement="left">Or continue with</n-divider>
-				<n-space justify="space-around">
-					<n-button @click="oauthLogin('github')">
-						<template #icon>
-							<n-icon>
-								<github />
-							</n-icon>
-						</template>
-						GitHub
-					</n-button>
-					<n-button @click="oauthLogin('google')">
-						<template #icon>
-							<n-icon>
-								<google />
-							</n-icon>
-						</template>
-						Google
-					</n-button>
-				</n-space>
-			</n-form>
-		</div>
-	</public-view>
+  <public-view>
+    <div id="content">
+      <div class="landing-page">
+        <img class="logo" src="/supaflare.png" alt="Supaflare Logo" />
+        <h2>Welcome to TwistURL!</h2>
+        <h1>Sign In</h1>
+        <n-form ref="formRef" :model="model" :rules="rules">
+          <n-form-item path="email" label="Email">
+            <n-input v-model:value="model.email" placeholder="Enter Email" @keydown.enter="handleValidateButtonClick" />
+          </n-form-item>
+          <n-form-item path="password" label="Password">
+            <n-input
+              v-model:value="model.password"
+              type="password"
+              placeholder="Enter Password"
+              @keydown.enter="handleValidateButtonClick"
+            />
+          </n-form-item>
+          <div class="button-container">
+            <n-button round type="primary" @click="handleValidateButtonClick">
+              Sign In
+            </n-button>
+          </div>
+        </n-form>
+        <n-divider title-placement="left">
+          <router-link to="/signup">Don't have an account? Sign-Up</router-link>
+        </n-divider>
+        <n-divider title-placement="left">Or continue with</n-divider>
+        <n-space justify="space-around">
+          <n-button @click="oauthLogin('github')">
+            <template #icon>
+              <n-icon>
+                <github />
+              </n-icon>
+            </template>
+            GitHub
+          </n-button>
+          <n-button @click="oauthLogin('google')">
+            <template #icon>
+              <n-icon>
+                <google />
+              </n-icon>
+            </template>
+            Google
+          </n-button>
+        </n-space>
+      </div>
+    </div>
+  </public-view>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { handleSignIn, handleOAuthLogin } from '@/services/auth';
 import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon } from 'naive-ui';
-import { Github, Google, Facebook } from '@vicons/fa';
-import { router } from '@/router';
+import { Github, Google } from '@vicons/fa';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
-	name: 'Auth',
-	components: {
-		NForm,
-		NFormItem,
-		NInput,
-		NButton,
-		NDivider,
-		NSpace,
-		NIcon,
-		Github,
-		Google,
-		Facebook,
-	},
-	setup() {
-		const messageDuration = 5000;
-		const formRef = ref();
-		const rPasswordFormItemRef = ref();
-		const message = useMessage();
-		const modelRef = ref({
-			email: '',
-			password: '',
-		});
+  name: 'Auth',
+  components: {
+    NForm,
+    NFormItem,
+    NInput,
+    NButton,
+    NDivider,
+    NSpace,
+    NIcon,
+    Github,
+    Google,
+  },
+  setup() {
+    const messageDuration = 5000;
+    const formRef = ref();
+    const message = useMessage();
+    const modelRef = ref({
+      email: '',
+      password: '',
+    });
 
-		const email = ref('');
-		const password = ref('');
+    const rules = {
+      email: [
+        {
+          required: true,
+          validator(rule: any, value: any) {
+            if (!value) {
+              return new Error('Email is required');
+            } else if (
+              !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+                value
+              )
+            ) {
+              return new Error('Please enter a valid email address');
+            }
+            return true;
+          },
+          trigger: ['input', 'blur'],
+        },
+      ],
+      password: [
+        {
+          validator(rule: any, value: any) {
+            if (value && value.length < 6) {
+              return new Error('Invalid Password');
+            }
+            return true;
+          },
+          trigger: ['input', 'blur'],
+        },
+      ],
+    };
 
-		const rules = {
-			email: [
-				{
-					required: true,
-					validator(rule: any, value: any) {
-						if (!value) {
-							return new Error('Email is required');
-						} else if (
-							!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
-								value
-							)
-						) {
-							return new Error('Please enter a valid email address');
-						}
-						return true;
-					},
-					trigger: ['input', 'blur'],
-				},
-			],
-			password: [
-				{
-					validator(rule: any, value: any) {
-						if (value && value.length < 6) {
-							return new Error('Invalid Password');
-						}
-						return true;
-					},
-					trigger: ['input', 'blur'],
-				},
-			],
-		};
+    async function oauthLogin(provider: any) {
+      try {
+        const { error } = await handleOAuthLogin(provider);
+        if (error) throw error;
+      } catch (error) {
+        message.error('Error authenticating with ' + provider + '...', { duration: messageDuration });
+      }
+    }
 
-		async function oauthLogin(provider: any) {
-			try {
-				const { error } = await handleOAuthLogin(provider);
-				if (error) throw error;
-			} catch (error) {
-				message.error('Error authenticating with ' + provider + '...', { duration: messageDuration });
-			}
-		}
+    function handleValidateButtonClick(e: any) {
+      e.preventDefault();
 
-		function unactivatedOAuth() {
-			message.error('This OAuth method is not enabled. For display purposes only.', { duration: messageDuration });
-		}
+      if (formRef.value) {
+        formRef.value.validate(async (error: any) => {
+          if (!error) {
+            try {
+              const { error, user } = await handleSignIn({
+                email: modelRef.value.email,
+                password: modelRef.value.password,
+              });
 
-		function handleValidateButtonClick(e: any) {
-		  e.preventDefault();
-		
-		  if (formRef.value) {
-		    formRef.value.validate(async (error: any) => {
-		      if (!error) {
-		        try {
-		          const { error, user } = await handleSignIn({
-		            email: modelRef.value.email,
-		            password: modelRef.value.password,
-		          });
-		
-		          if (error) {
-		            throw new Error(error.message);
-		          }
-		
-		          if (user) {
-		            router.push('/links')// Redirect to dashboard or home page
-		          }
-		        } catch (error) {
-		          message.error('Error signing in...', { duration: messageDuration });
-		        }
-		      } else {
-		        message.error('Please confirm your sign in details...', { duration: messageDuration });
-		      }
-		    });
-		  }
-		}
+              if (error) {
+                throw new Error(error.message);
+              }
 
+              if (user) {
+                const router = useRouter();
+                router.push('/links'); // Redirect to dashboard or home page
+              }
+            } catch (error) {
+              message.error('Error signing in...', { duration: messageDuration });
+            }
+          } else {
+            message.error('Please confirm your sign in details...', { duration: messageDuration });
+          }
+        });
+      }
+    }
 
-		return {
-			email,
-			password,
-			oauthLogin,
-			unactivatedOAuth,
-			formRef,
-			rPasswordFormItemRef,
-			model: modelRef,
-			rules,
-			handleValidateButtonClick,
-		};
-	},
+    return {
+      oauthLogin,
+      formRef,
+      model: modelRef,
+      rules,
+      handleValidateButtonClick,
+    };
+  },
 });
 </script>
 
@@ -183,53 +166,41 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: 100vh;
   text-align: center;
-  background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
-   /* Light gray background */
-  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%); /* Gradient background */
-  background-size: cover; /* Cover entire container */
-  background-repeat: no-repeat; /* No repeat */
-  padding: 20px; /* Padding for content */
+  background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+  padding: 20px;
 }
 
-form {
-  width: 400px;
-  background-color: #fff7ae;
-
-/* White background for form */
-  border-radius: 10px; /* Rounded corners */
-  padding: 20px; /* Padding inside form */
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+.landing-page {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 40px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
 }
 
 .logo {
-  width: 300px;
-  margin-bottom: 20px; /* Adjusted margin */
+  width: 150px;
+  margin-bottom: 20px;
 }
 
-input {
-  text-align: center;
-  font-size: 18px;
-  border: 1px solid #ccc; /* Light gray border */
-  border-radius: 5px; /* Rounded input fields */
-  padding: 10px; /* Padding inside inputs */
+h1, h2 {
+  margin-bottom: 20px;
 }
 
-h1 {
-  text-align: left;
-  font-size: 24px; /* Larger font size */
-  margin-bottom: 10px; /* Adjusted margin */
+.n-form-item {
+  margin-bottom: 20px;
 }
 
-h2 {
-  font-size: 20px; /* Larger font size */
-  margin-bottom: 20px; /* Adjusted margin */
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .n-space {
-  margin-top: 20px; /* Space between buttons and other content */
+  margin-top: 20px;
 }
 </style>
-
-
