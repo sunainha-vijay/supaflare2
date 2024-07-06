@@ -1,4 +1,3 @@
-
 <template>
   <admin-view>
     <h1>Dashboard</h1>
@@ -20,7 +19,7 @@ import { fetchLinks } from '@/services/links';
 export default defineComponent({
   components: {},
   setup() {
-    const links = ref([]);
+    const links = ref<any[]>([]); // Initialize with an empty array
     const columns = ref([
       { title: 'Short URL', key: 'slug' },
       { title: 'Long URL', key: 'url' },
@@ -31,7 +30,7 @@ export default defineComponent({
 
     onMounted(async () => {
       const { data } = await fetchLinks();
-      links.value = data;
+      links.value = data || [];
     });
 
     return { links, columns };
