@@ -1,4 +1,3 @@
-
 <template>
 	<admin-view>
 		<h1>Manage Links</h1>
@@ -61,21 +60,7 @@
 									Generate Slug
 								</n-button>
 							</n-form-item>
-													</n-row>
-							<n-form-item path="start_date" label="Start Date">
-							  <n-date-picker
-							    v-model:value="model.start_date"
-							    type="datetime"
-							    placeholder="Select Start Date"
-							  />
-							</n-form-item>
-							<n-form-item path="end_date" label="End Date">
-							  <n-date-picker
-							    v-model:value="model.end_date"
-							    type="datetime"
-							    placeholder="Select End Date"
-							  />
-							</n-form-item>
+						</n-row>
 						<n-form-item path="android_url" label="Android URL" style="flex-grow: 1">
 							<n-input
 								v-model:value="model.android_url_raw"
@@ -183,8 +168,6 @@ export default defineComponent({
 				return modelRef.value.ios_url_raw[0] + '://' + modelRef.value.ios_url_raw[1];
 			}),
 			ios_url_raw: ['', ''],
-			start_date: '',
-                        end_date: '',
 		});
 		const editRowRef = ref();
 
@@ -267,128 +250,134 @@ export default defineComponent({
 		}
 
 		async function handleSaveEdits() {
-		  try {
-		    await formRef.value.validate();
-		  } catch (error) {
-		    return;
-		  }
-		  try {
-		    showLoadingSpinner.value = true;
-		    const { error } = await editLink(editRowRef.value, {
-		      url: modelRef.value.url,
-		      slug: modelRef.value.slug,
-		      meta: {
-		        android_url: modelRef.value.android_url,
-		        ios_url: modelRef.value.ios_url,
-		      },
-		    });
-		    if (error) throw error;
-		
-		    for (let link of links.value) {
-		      if (link.id === editRowRef.value.id) {
-		        link.url = modelRef.value.url;
-		        link.slug = modelRef.value.slug;
-		        link.meta = {
-		          android_url: modelRef.value.android_url,
-		          ios_url: modelRef.value.ios_url,
-		        };
-		      }
-		    }
-		
-		    message.success('Link successfully updated!', { duration: messageDuration });
-		    showEditModal.value = false;
-		  } catch (error: any) {
-		    if (error.code == '23505') {
-		      message.error('Slug already exists. Please change the slug.', { duration: messageDuration });
-		    } else {
-		      message.error('Error updating link...', { duration: messageDuration });
-		    }
-		  } finally {
-		    showLoadingSpinner.value = false;
-		  }
+			try {
+				await formRef.value.validate();
+			} catch (error) {
+				return;
+			}
+			try {
+				showLoadingSpinner.value = true;
+				const { error } = await editLink(editRowRef.value, {
+					url: modelRef.value.url,
+					slug: modelRef.value.slug,
+					meta: {
+						android_url: modelRef.value.android_url,
+						ios_url: modelRef.value.ios_url,
+					},
+				});
+				if (error) throw error;
+
+				for (let link of links.value) {
+					if (link.id === editRowRef.value.id) {
+						link.url = modelRef.value.url;
+						link.slug = modelRef.value.slug;
+						link.meta = {
+							android_url: modelRef.value.android_url,
+							ios_url: modelRef.value.ios_url,
+						};
+					}
+				}
+
+				message.success('Link successfully updated!', { duration: messageDuration });
+				showEditModal.value = false;
+			} catch (error: any) {
+				if (error.code == '23505') {
+					message.error('Slug already exists. Please change the slug.', { duration: messageDuration });
+				} else {
+					message.error('Error updating link...', { duration: messageDuration });
+				}
+			} finally {
+				showLoadingSpinner.value = false;
+			}
 		}
 
-
-
-
 		const columns: any = [
-			{
-				title: 'URL',
-				key: 'url',
-				render(row: any) {
-					return h(
-						'a',
-						{
-							href: row.url,
-							target: '_blank',
-						},
-						{ default: () => row.url }
-					);
-				},
-			},
-			{
-				title: 'Slug',
-				key: 'slug',
-				render(row: any) {
-					return h('b', {}, { default: () => '/' + row.slug });
-				},
-			},
-			{
-				title: 'Android URL',
-				key: 'meta.android_url',
-				render(row: any) {
-					return h(
-						'a',
-						{
-							href: row.meta.android_url,
-							target: '_blank',
-						},
-						{ default: () => row.meta.android_url }
-					);
-				},
-			},
-			{
-				title: 'iOS URL',
-				key: 'meta.ios_url',
-				render(row: any) {
-					return h(
-						'a',
-						{
-							href: row.meta.ios_url,
-							target: '_blank',
-						},
-						{ default: () => row.meta.ios_url }
-					);
-				},
-			},
-			{
-				title: 'Action',
-				key: 'actions',
-				width: '150px',
-				render(row: any) {
-					return h('div', [
-						h(
-							NButton,
-							{
-								size: 'small',
-								onClick: () => handleEditLink(row),
-							},
-							{ default: () => 'Edit' }
-						),
-						h(
-							NButton,
-							{
-								size: 'small',
-								type: 'error',
-								style: 'margin-left: 10px',
-								onClick: () => handleDeleteLink(row),
-							},
-							{ default: () => 'Delete' }
-						),
-					]);
-				},
-			},
+		    {
+		        title: 'URL',
+		        key: 'url',
+		        render(row: any) {
+		            return h(
+		                'a',
+		                {
+		                    href: row.url,
+		                    target: '_blank',
+		                },
+		                { default: () => row.url }
+		            );
+		        },
+		    },
+		    {
+		        title: 'Slug',
+		        key: 'slug',
+		        render(row: any) {
+		            const fullUrl = `https://supaflare-worker.sunainhavijay.workers.dev/${row.slug}`;
+		            return h(
+		                'a',
+		                {
+		                    href: fullUrl,
+		                    target: '_blank',
+		                },
+		                { default: () => fullUrl }
+		            );
+		        },
+		    },
+		    {
+		        title: 'Android URL',
+		        key: 'meta.android_url',
+		        render(row: any) {
+		            return h(
+		                'a',
+		                {
+		                    href: row.meta.android_url,
+		                    target: '_blank',
+		                },
+		                { default: () => row.meta.android_url }
+		            );
+		        },
+		    },
+		    {
+		        title: 'iOS URL',
+		        key: 'meta.ios_url',
+		        render(row: any) {
+		            return h(
+		                'a',
+		                {
+		                    href: row.meta.ios_url,
+		                    target: '_blank',
+		                },
+		                { default: () => row.meta.ios_url }
+		            );
+		        },
+		    },
+		    {
+		        title: 'Action',
+		        key: 'actions',
+		        width: '150px',
+		        render(row: any) {
+		            return h('div', [
+		                h(
+		                    NButton,
+		                    {
+		                        size: 'small',
+		                        onClick: () => handleEditLink(row),
+		                    },
+		                    { default: () => 'Edit' }
+		                ),
+		                h(
+		                    NButton,
+		                    {
+		                        size: 'small',
+		                        type: 'error',
+		                        style: 'margin-left: 10px',
+		                        onClick: () => handleDeleteLink(row),
+		                    },
+		                    { default: () => 'Delete' }
+		                ),
+		            ]);
+		        },
+		    },
 		];
+
 
 		const rowKey = () => {
 			return 'id';
