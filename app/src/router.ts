@@ -1,7 +1,8 @@
+// router.ts
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { useAppStore } from '@/stores/appStore';
 import { supabase } from '@/services/supabase';
-import { fetchLinkBySlug } from '@/services/links'; // Import the function
+import { fetchLinkBySlug } from '@/services/links';
 
 import SignInRoute from '@/routes/public/sign-in';
 
