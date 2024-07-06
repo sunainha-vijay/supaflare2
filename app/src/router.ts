@@ -79,29 +79,44 @@ export const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-	if (!appStore) {
-		appStore = useAppStore();
-	}
+  if (!appStore) {
+    appStore = useAppStore();
+  }
 
-	if (!from.name) {
-		appStore.initialPath = to.path;
-	}
+  if (!from.name) {
+    appStore.initialPath = to.path;
+  }
 
-	if (to.path === '/' && appStore.supabaseSession) {
-		next({ path: '/links' });
-		return;
-	}
+  const currentDate = new Date();
 
-	if (to.matched.some((record) => record.meta.requiresAuth)) {
-		if (!appStore.supabaseSession) {
-			next({ path: '/' });
-		} else {
-			next();
-		}
-	} else {
-		next();
-	}
+  if (to.path !== '/' && appStore.supabaseSession) {
+    const link = await fetchLinkBySlug(to.path.substring(1)); // assuming you have a function to fetch the link by slug
+    if (link) {
+      const startDate = new Date(link.start_date);
+      const endDate = new Date(link.end_date);
+      if (currentDate < startDate || currentDate > endDate) {
+        next({ path: '/not-found' });
+        return;
+      }
+    }
+  }
+
+  if (to.path === '/' && appStore.supabaseSession) {
+    next({ path: '/links' });
+    return;
+  }
+
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!appStore.supabaseSession) {
+      next({ path: '/' });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
+
 
 router.afterEach((to) => {
 	document.title = to.name ? String(to.name) : defaultTitle;
