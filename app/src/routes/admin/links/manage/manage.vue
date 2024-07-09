@@ -307,7 +307,7 @@ export default defineComponent({
 		        },
 		    },
 		    {
-		        title: 'Slug',
+		        title: 'ShortURL',
 		        key: 'slug',
 		        render(row: any) {
 		            const fullUrl = `https://supaflare-worker.sunainhavijay.workers.dev/${row.slug}`;
