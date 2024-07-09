@@ -9,4 +9,6 @@ export declare interface Link {
 	};
 	updated_at?: string;
 	inserted_at?: string;
+	startDate?: string;
+	expirationDate?: string;
 }
