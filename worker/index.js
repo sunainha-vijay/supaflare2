@@ -2,20 +2,19 @@ import { createClient } from '@supabase/supabase-js';
 import jwt from '@tsndr/cloudflare-worker-jwt';
 
 addEventListener('fetch', async (event) => {
-  const { request } = event;
-  const { url } = request;
+	const { request } = event;
+	const { url } = request;
 
-  if (request.method === 'OPTIONS') {
-    return event.respondWith(handleOptions(request));
-  } else if (request.method === 'POST' && url.includes('/supaflare_cfw_admin_update')) {
-    return event.respondWith(processUpdateAdmin(request));
-  } else if (request.method === 'POST' && url.includes('/supaflare_cfw_update')) {
-    return event.respondWith(processUpdate(request));
-  } else {
-    return event.respondWith(processRedirect(request));
-  }
+	if (request.method === 'OPTIONS') {
+		return event.respondWith(handleOptions(request));
+	} else if (request.method === 'POST' && url.includes('/supaflare_cfw_admin_update')) {
+		return event.respondWith(processUpdateAdmin(request));
+	} else if (request.method === 'POST' && url.includes('/supaflare_cfw_update')) {
+		return event.respondWith(processUpdate(request));
+	} else {
+		return event.respondWith(processRedirect(request));
+	}
 });
-
 
 async function processUpdate(request) {
 	const { headers } = request;
@@ -110,27 +109,22 @@ async function updateKV(requestData, data) {
 }
 
 async function processRedirect(request) {
-  const url = new URL(request.url);
-  let linkData = await SUPAFLARE.get('links:slug' + url.pathname, { type: 'json' });
-
-  if (!linkData) {
-    return new Response('Not Found.', {
-      status: 404,
-    });
-  } else {
-    const currentTime = new Date();
-    if (currentTime < new Date(linkData.start_date) || currentTime > new Date(linkData.end_date)) {
-      return Response.redirect('/not-found', 302);
-    }
-    const userAgent = request.headers.get('User-Agent') || '';
-    if (/android/i.test(userAgent) && linkData.meta.android_url) {
-      return Response.redirect(linkData.meta.android_url, 302);
-    } else if (/iPad|iPhone|iPod/.test(userAgent) && linkData.meta.ios_url) {
-      return Response.redirect(linkData.meta.ios_url, 302);
-    } else {
-      return Response.redirect(linkData.url, 302);
-    }
-  }
+	const url = new URL(request.url);
+	let linkData = await SUPAFLARE.get('links:slug' + url.pathname, { type: 'json' });
+	if (!linkData) {
+		return new Response('Not Found.', {
+			status: 404,
+		});
+	} else {
+		const userAgent = request.headers.get('User-Agent') || '';
+		if (/android/i.test(userAgent) && linkData.meta.android_url) {
+			return Response.redirect(linkData.meta.android_url, 302);
+		} else if (/iPad|iPhone|iPod/.test(userAgent) && linkData.meta.ios_url) {
+			return Response.redirect(linkData.meta.ios_url, 302);
+		} else {
+			return Response.redirect(linkData.url, 302);
+		}
+	}
 }
 
 const corsHeaders = {
