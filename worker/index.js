@@ -109,23 +109,24 @@ async function updateKV(requestData, data) {
 }
 
 async function processRedirect(request) {
-	const url = new URL(request.url);
-	let linkData = await SUPAFLARE.get('links:slug' + url.pathname, { type: 'json' });
-	if (!linkData) {
-		return new Response('Not Found.', {
-			status: 404,
-		});
-	} else {
-		const userAgent = request.headers.get('User-Agent') || '';
-		if (/android/i.test(userAgent) && linkData.meta.android_url) {
-			return Response.redirect(linkData.meta.android_url, 302);
-		} else if (/iPad|iPhone|iPod/.test(userAgent) && linkData.meta.ios_url) {
-			return Response.redirect(linkData.meta.ios_url, 302);
-		} else {
-			return Response.redirect(linkData.url, 302);
-		}
-	}
+    const url = new URL(request.url);
+    let linkData = await SUPAFLARE.get('links:slug' + url.pathname, { type: 'json' });
+    if (!linkData) {
+        return new Response('Not Found.', {
+            status: 404,
+        });
+    } else {
+        const userAgent = request.headers.get('User-Agent') || '';
+        if (/android/i.test(userAgent) && linkData.meta.android_url) {
+            return Response.redirect(linkData.meta.android_url, 302);
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && linkData.meta.ios_url) {
+            return Response.redirect(linkData.meta.ios_url, 302);
+        } else {
+            return Response.redirect(linkData.url, 302);
+        }
+    }
 }
+
 
 const corsHeaders = {
 	'Access-Control-Allow-Origin': '*',
