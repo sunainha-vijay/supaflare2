@@ -5,5 +5,5 @@ compatibility_flags = []
 workers_dev = true
 compatibility_date = "2021-10-10"
 kv_namespaces = [
-  { binding = "SUPAFLARE", id = "30479802e17c4da2b3253ea66b8f7e45" },
+  { binding = "SUPAFLARE", id = "7fa4f57391474ac8b1306c5d1ba7211e" },
 ]
