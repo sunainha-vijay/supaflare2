@@ -321,7 +321,7 @@ export default defineComponent({
 		            );
 		        },
 		    },
-		  /*{
+		    {
 		        title: 'Android URL',
 		        key: 'meta.android_url',
 		        render(row: any) {
@@ -348,7 +348,7 @@ export default defineComponent({
 		                { default: () => row.meta.ios_url }
 		            );
 		        },
-		    },*/
+		    },
 		    {
 		        title: 'Action',
 		        key: 'actions',
