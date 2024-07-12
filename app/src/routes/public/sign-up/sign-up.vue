@@ -134,8 +134,6 @@ export default defineComponent({
   padding: 20px;
   font-family: 'Roboto', sans-serif;
   background: radial-gradient(circle, rgba(44,44,44,1) 0%, rgba(34,34,34,1) 100%);
-  background-size: 200% 200%;
-  animation: swirl 20s linear infinite;
 }
 
 #content::before, #content::after {
