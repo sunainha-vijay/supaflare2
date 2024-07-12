@@ -121,14 +121,49 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 #content {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
   text-align: center;
-  background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+  overflow: hidden;
+  position: relative;
   padding: 20px;
+  font-family: 'Roboto', sans-serif;
+  background: radial-gradient(circle, rgba(44,44,44,1) 0%, rgba(34,34,34,1) 100%);
+  background-size: 200% 200%;
+  animation: swirl 20s linear infinite;
+}
+
+#content::before, #content::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,0,0.2) 20%, transparent 20%) center center / 10px 10px;
+  border-radius: 50%;
+  mix-blend-mode: color-dodge;
+  animation: swirl 20s linear infinite;
+  z-index: 0;
+}
+
+#content::after {
+  background: radial-gradient(circle, rgba(0,0,255,0.2) 20%, transparent 20%) center center / 10px 10px;
+  animation: swirl 20s linear infinite reverse;
+}
+
+@keyframes swirl {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 .landing-page {
@@ -138,6 +173,8 @@ export default defineComponent({
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   max-width: 400px;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .logo {
