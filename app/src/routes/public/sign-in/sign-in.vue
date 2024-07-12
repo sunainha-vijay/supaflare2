@@ -1,6 +1,5 @@
 
         
-
 <template>
   <public-view>
     <div id="content">
@@ -189,7 +188,8 @@ export default defineComponent({
   margin-bottom: 20px;
 }
 
-h1, h2 {
+h1,
+h2 {
   margin-bottom: 20px;
 }
 
