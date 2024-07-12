@@ -37,7 +37,7 @@
         </n-divider>
         <n-divider title-placement="left">Or continue with</n-divider>
         <n-space justify="space-around">
-          <n-button @click="oauthLogin('github')">
+          <n-button @click="oauthLogin('github')" class="oauth-button github">
             <template #icon>
               <n-icon>
                 <Github />
@@ -45,7 +45,7 @@
             </template>
             GitHub
           </n-button>
-          <n-button @click="oauthLogin('google')">
+          <n-button @click="oauthLogin('google')" class="oauth-button google">
             <template #icon>
               <n-icon>
                 <Google />
@@ -171,13 +171,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 #content {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f8f9fa;
+  background-color: #f0f2f5;
   padding: 20px;
+  font-family: 'Roboto', sans-serif;
 }
 
 .container {
@@ -186,38 +189,42 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
   background-color: #ffffff;
-  border-radius: 8px;
-  padding: 40px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  max-width: 1100px;
+  border-radius: 16px;
+  padding: 60px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
   width: 100%;
+  animation: fadeIn 1s ease-in-out;
 }
 
 .features {
   flex: 1;
-  padding-right: 20px;
+  padding-right: 40px;
 }
 
 .auth {
   flex: 1;
-  padding-left: 20px;
+  padding-left: 40px;
+  text-align: center;
 }
 
 .features h1 {
   font-size: 2.5rem;
   margin-bottom: 20px;
-  color: #343a40;
+  color: #333;
+  font-weight: 700;
 }
 
 .features p {
   font-size: 1.1rem;
-  color: #6c757d;
+  color: #555;
   line-height: 1.6;
 }
 
 .auth h1, .auth h2 {
   margin-bottom: 20px;
-  color: #343a40;
+  color: #333;
+  font-weight: 700;
 }
 
 .n-form-item {
@@ -236,9 +243,52 @@ export default defineComponent({
 
 .n-button {
   width: 100%;
+  transition: background-color 0.3s;
+}
+
+.n-button:hover {
+  background-color: #007bff;
+  color: #fff;
 }
 
 .n-divider {
   margin: 20px 0;
+}
+
+.oauth-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.github {
+  background-color: #333;
+  color: #fff;
+}
+
+.github:hover {
+  background-color: #444;
+}
+
+.google {
+  background-color: #db4437;
+  color: #fff;
+}
+
+.google:hover {
+  background-color: #e74c3c;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
