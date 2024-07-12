@@ -1,13 +1,13 @@
 <template>
   <div id="content">
     <div class="container">
-      <div class="features">
+      <div class="features-section">
         <h1>Keep your links short and secure!</h1>
         <p>
           Go beyond short links! Shorten URLs and share them with a select group, but keep the contents a secret. Set expiration dates and track access to your shortened URLs. Know exactly who sees your info, and when it disappears forever.
         </p>
       </div>
-      <div class="auth">
+      <div class="auth-section">
         <h2>Welcome to TwistURL!</h2>
         <h1>Sign In</h1>
         <n-form ref="formRef" :model="model" :rules="rules">
@@ -56,13 +56,24 @@
         </n-space>
       </div>
     </div>
+    <div class="features-accordion">
+      <h2>Features</h2>
+      <n-collapse>
+        <n-collapse-item title="Shorten It Up" name="1">
+          <n-collapse-item title="Make long URLs tiny for easy sharing. Edit them later if needed!" name="1-1"></n-collapse-item>
+        </n-collapse-item>
+        <n-collapse-item title="Make it Disappear" name="2"></n-collapse-item>
+        <n-collapse-item title="Secret Knock" name="3"></n-collapse-item>
+        <n-collapse-item title="Who Opened It?" name="4"></n-collapse-item>
+      </n-collapse>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { handleSignIn, handleOAuthLogin } from '@/services/auth';
-import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon } from 'naive-ui';
+import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon, NCollapse, NCollapseItem } from 'naive-ui';
 import { Github, Google } from '@vicons/fa';
 import { useRouter } from 'vue-router';
 
@@ -78,6 +89,8 @@ export default defineComponent({
     NIcon,
     Github,
     Google,
+    NCollapse,
+    NCollapseItem,
   },
   setup() {
     const messageDuration = 5000;
@@ -175,9 +188,10 @@ export default defineComponent({
 
 #content {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #2c2c2c;
   overflow: hidden;
   position: relative;
@@ -229,34 +243,23 @@ export default defineComponent({
   z-index: 1;
 }
 
-.features {
+.features-section, .auth-section {
   flex: 1;
-  padding-right: 40px;
-}
-
-.auth {
-  flex: 1;
-  padding-left: 40px;
+  padding: 0 20px;
   text-align: center;
 }
 
-.features h1 {
+.features-section h1, .auth-section h1, .auth-section h2 {
   font-size: 2.5rem;
   margin-bottom: 20px;
   color: #333;
   font-weight: 700;
 }
 
-.features p {
+.features-section p {
   font-size: 1.1rem;
   color: #555;
   line-height: 1.6;
-}
-
-.auth h1, .auth h2 {
-  margin-bottom: 20px;
-  color: #333;
-  font-weight: 700;
 }
 
 .n-form-item {
@@ -292,37 +295,45 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-top: 10px;
+  transition: background-color 0.3s;
 }
 
-.github {
+.oauth-button:hover {
   background-color: #333;
   color: #fff;
 }
 
-.github:hover {
-  background-color: #444;
+.oauth-button.github {
+  background-color: #24292e;
+  color: #fff;
 }
 
-.google {
+.oauth-button.google {
   background-color: #db4437;
   color: #fff;
 }
 
-.google:hover {
-  background-color: #e74c3c;
+.features-accordion {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 40px;
+}
+
+.features-accordion h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
 }
 
 @keyframes fadeIn {
-  0% {
+  from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(-10px);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 </style>
-
-
