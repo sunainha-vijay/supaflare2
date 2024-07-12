@@ -1,52 +1,61 @@
-
-        
 <template>
   <public-view>
     <div id="content">
       <div class="landing-page">
-        <img src="/supaflare.png" alt="Supaflare Logo"" />
-        <h2>Welcome to TwistURL!</h2>
-        <h1>Sign In</h1>
-        <n-form ref="formRef" :model="model" :rules="rules">
-          <n-form-item path="email" label="Email">
-            <n-input v-model:value="model.email" placeholder="Enter Email" @keydown.enter="handleValidateButtonClick" />
-          </n-form-item>
-          <n-form-item path="password" label="Password">
-            <n-input
-              v-model:value="model.password"
-              type="password"
-              placeholder="Enter Password"
-              @keydown.enter="handleValidateButtonClick"
-            />
-          </n-form-item>
-          <div class="button-container">
-            <n-button round type="primary" @click="handleValidateButtonClick">
-              Sign In
+        <div class="features-container">
+          <h1>Keep your links short and secure!</h1>
+          <p>
+            Go beyond short links! Shorten URLs and share them with a select group, but keep the contents a secret. Set expiration dates and track access to your shortened URLs. Know exactly who sees your info, and when it disappears forever.
+          </p>
+        </div>
+        <div class="auth-container">
+          <h2>Welcome to TwistURL!</h2>
+          <h1>Sign In</h1>
+          <n-form ref="formRef" :model="model" :rules="rules">
+            <n-form-item path="email" label="Username">
+              <n-input
+                v-model:value="model.email"
+                placeholder="Enter Username"
+                @keydown.enter="handleValidateButtonClick"
+              />
+            </n-form-item>
+            <n-form-item path="password" label="Password">
+              <n-input
+                v-model:value="model.password"
+                type="password"
+                placeholder="Enter Password"
+                @keydown.enter="handleValidateButtonClick"
+              />
+            </n-form-item>
+            <div class="button-container">
+              <n-button round type="primary" @click="handleValidateButtonClick">
+                Sign In
+              </n-button>
+            </div>
+          </n-form>
+          <n-divider title-placement="left">
+            <router-link to="/signup">Don't have an account? Sign-Up</router-link>
+          </n-divider>
+          <n-divider title-placement="left">Or continue with</n-divider>
+          <n-space justify="space-around">
+            <n-button @click="oauthLogin('github')">
+              <template #icon>
+                <n-icon>
+                  <Github />
+                </n-icon>
+              </template>
+              GitHub
             </n-button>
-          </div>
-        </n-form>
-        <n-divider title-placement="left">
-          <router-link to="/signup">Don't have an account? Sign-Up</router-link>
-        </n-divider>
-        <n-divider title-placement="left">Or continue with</n-divider>
-        <n-space justify="space-around">
-          <n-button @click="oauthLogin('github')">
-            <template #icon>
-              <n-icon>
-                <Github />
-              </n-icon>
-            </template>
-            GitHub
-          </n-button>
-          <n-button @click="oauthLogin('google')">
-            <template #icon>
-              <n-icon>
-                <Google />
-              </n-icon>
-            </template>
-            Google
-          </n-button>
-        </n-space>
+            <n-button @click="oauthLogin('google')">
+              <template #icon>
+                <n-icon>
+                  <Google />
+                </n-icon>
+              </template>
+              Google
+            </n-button>
+          </n-space>
+        </div>
       </div>
     </div>
   </public-view>
@@ -175,21 +184,29 @@ export default defineComponent({
 }
 
 .landing-page {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   background-color: #fff;
   border-radius: 10px;
   padding: 40px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  max-width: 400px;
+  max-width: 1200px;
   width: 100%;
 }
 
-.logo {
-  width: 150px;
-  margin-bottom: 20px;
+.features-container {
+  flex: 1;
+  margin-right: 20px;
 }
 
-h1,
-h2 {
+.auth-container {
+  flex: 1;
+  text-align: center;
+}
+
+h1, h2 {
   margin-bottom: 20px;
 }
 
