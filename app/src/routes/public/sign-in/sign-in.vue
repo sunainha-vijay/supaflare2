@@ -2,11 +2,17 @@
   <div id="content">
     <div class="container">
       <div class="features">
-        <img class="logo" src="/supaflare.png" alt="Supaflare Logo" />
         <h1>Keep your links short and secure with TwistURL</h1>
         <p>
           Go beyond short links! Shorten URLs and share them with a select group, but keep the contents a secret. Set expiration dates and track access to your shortened URLs. Know exactly who sees your info, and when it disappears forever.
         </p>
+        <h2>Features</h2>
+        <ul>
+         <li> Shorten It Up: Make long URLs tiny for easy sharing. Edit them later if needed</li>
+         <li>Make it Disappear: Set your link to vanish after a certain date, keeping things exciting!/li>
+         <li>Secret Knock: Add an extra layer of security with a quick email verification. Only those who get the "knock" can access your link!</li>
+        <li>Who Opened It?: Get notified when someone opens your link.</li>
+      </ul>
       </div>
       <div class="auth">
         <h1>Sign In</h1>
@@ -27,7 +33,7 @@
             />
           </n-form-item>
           <div class="button-container">
-            <n-button round type="primary" @click="handleValidateButtonClick" class="sign-in-button">
+            <n-button round type="primary" @click="handleValidateButtonClick">
               Sign In
             </n-button>
           </div>
@@ -56,25 +62,27 @@
         </n-space>
       </div>
     </div>
-    <div id="feature-section" class="features-list">
+    <n-button class="view-features-btn" @click="scrollToFeatures">
+      Click to view features
+    </n-button>
+    <div ref="featuresSection" class="features-section">
       <h2>Features</h2>
-      <ul>
-        <li v-for="feature in features" :key="feature.id">
-          <h3>{{ feature.title }}</h3>
-          <p>{{ feature.description }}</p>
-        </li>
-      </ul>
+      <h3>Our very own cool features</h3>
+      <n-grid :cols="2" :x-gap="16" :y-gap="16">
+        <n-grid-item v-for="feature in features" :key="feature.id">
+          <n-card :title="feature.title">
+            {{ feature.description }}
+          </n-card>
+        </n-grid-item>
+      </n-grid>
     </div>
-    <footer>
-      <a href="https://github.com/sunainha-vijay" target="_blank">sunainha-vijay</a>
-    </footer>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { handleSignIn, handleOAuthLogin } from '@/services/auth';
-import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon } from 'naive-ui';
+import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon, NGrid, NGridItem, NCard } from 'naive-ui';
 import { Github, Google } from '@vicons/fa';
 import { useRouter } from 'vue-router';
 
@@ -90,15 +98,42 @@ export default defineComponent({
     NIcon,
     Github,
     Google,
+    NGrid,
+    NGridItem,
+    NCard,
   },
   setup() {
     const messageDuration = 5000;
     const formRef = ref();
     const message = useMessage();
+    const featuresSection = ref(null);
     const modelRef = ref({
       email: '',
       password: '',
     });
+
+    const features = [
+      {
+        id: 1,
+        title: "Shorten It Up",
+        description: "Make long URLs tiny for easy sharing. Edit them later if needed!",
+      },
+      {
+        id: 2,
+        title: "Make it Disappear",
+        description: "Set your link to vanish after a certain date, keeping things exciting!",
+      },
+      {
+        id: 3,
+        title: "Secret Knock",
+        description: "Add an extra layer of security with a quick email verification. Only those who get the Knock can access your link!",
+      },
+      {
+        id: 4,
+        title: "Who Opened It?",
+        description: "Get notified when someone opens your link",
+      },
+    ];
 
     const rules = {
       email: [
@@ -108,7 +143,7 @@ export default defineComponent({
             if (!value) {
               return new Error('Email is required');
             } else if (
-              !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+              !/^[a-zA-Z0-9.!#$%&'*+/=?^_{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
                 value
               )
             ) {
@@ -131,6 +166,25 @@ export default defineComponent({
         },
       ],
     };
+
+    function scrollToFeatures() {
+      if (featuresSection.value) {
+        featuresSection.value.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    onMounted(() => {
+      window.addEventListener('scroll', checkScroll);
+    });
+
+    function checkScroll() {
+      if (featuresSection.value) {
+        const rect = featuresSection.value.getBoundingClientRect();
+        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+          featuresSection.value.classList.add('visible');
+        }
+      }
+    }
 
     async function oauthLogin(provider: any) {
       try {
@@ -171,29 +225,6 @@ export default defineComponent({
       }
     }
 
-    const features = [
-      {
-        id: 1,
-        title: "Shorten It Up",
-        description: "Make long URLs tiny for easy sharing. Edit them later if needed!",
-      },
-      {
-        id: 2,
-        title: "Make it Disappear",
-        description: "Set your link to vanish after a certain date, keeping things exciting!",
-      },
-      {
-        id: 3,
-        title: "Secret Knock",
-        description: "Add an extra layer of security with a quick email verification. Only those who get the Knock can access your link! ",
-      },
-      {
-        id: 4,
-        title: "Who Opened It?",
-        description: "Get notified when someone opens your link",
-      },
-    ];
-
     return {
       oauthLogin,
       formRef,
@@ -201,6 +232,8 @@ export default defineComponent({
       rules,
       handleValidateButtonClick,
       features,
+      featuresSection,
+      scrollToFeatures,
     };
   },
 });
@@ -213,13 +246,11 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  min-height: 100vh;
   background-color: #2c2c2c;
-  overflow: hidden;
   position: relative;
   padding: 20px;
   font-family: 'Roboto', sans-serif;
-  min-height: 100vh;
 }
 
 #content::before, #content::after {
@@ -264,7 +295,6 @@ export default defineComponent({
   animation: fadeIn 1s ease-in-out;
   position: relative;
   z-index: 1;
-  margin-bottom: 40px;
 }
 
 .features {
@@ -313,12 +343,11 @@ export default defineComponent({
 
 .n-button {
   width: 100%;
-  background-color: #ffbc58; /* Yellow color */
   transition: background-color 0.3s;
 }
 
 .n-button:hover {
-  background-color: #ffca28; /* Darker yellow color */
+  background-color: #007bff;
   color: #fff;
 }
 
@@ -352,41 +381,6 @@ export default defineComponent({
   background-color: #e74c3c;
 }
 
-.features-list {
-  padding: 40px;
-  max-width: 800px;
-  background-color: #fff;
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  margin-top: 40px;
-}
-
-.features-list h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.features-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-.features-list li {
-  margin-bottom: 20px;
-}
-
-.features-list h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #555;
-}
-
-.features-list p {
-  font-size: 1rem;
-  color: #777;
-}
-
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -396,5 +390,50 @@ export default defineComponent({
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.view-features-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 10;
+}
+
+.features-section {
+  padding: 60px 20px;
+  background-color: #f8f9fa;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s, transform 0.5s;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 40px;
+}
+
+.features-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.features-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.features-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  color: #666;
+}
+
+.n-card {
+  height: 100%;
+}
+
+.n-card-header {
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 </style>
