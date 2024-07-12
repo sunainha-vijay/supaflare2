@@ -56,27 +56,23 @@
         </n-space>
       </div>
     </div>
-    <n-button class="view-features-btn" @click="scrollToFeatures">
-      Click to view features
-    </n-button>
-    <div ref="featuresSection" class="features-section">
+    <div id="feature-section" class="features-list">
       <h2>Features</h2>
-      <h3>Our very own cool features</h3>
-      <n-grid :cols="2" :x-gap="16" :y-gap="16">
-        <n-grid-item v-for="feature in features" :key="feature.id">
-          <n-card :title="feature.title">
-            {{ feature.description }}
-          </n-card>
-        </n-grid-item>
-      </n-grid>
+      <ul>
+        <li v-for="feature in features" :key="feature.id">
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </li>
+      </ul>
     </div>
+    <n-button class="scroll-button" @click="scrollToFeatures">Click to view features</n-button>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { handleSignIn, handleOAuthLogin } from '@/services/auth';
-import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon, NGrid, NGridItem, NCard } from 'naive-ui';
+import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon } from 'naive-ui';
 import { Github, Google } from '@vicons/fa';
 import { useRouter } from 'vue-router';
 
@@ -92,42 +88,15 @@ export default defineComponent({
     NIcon,
     Github,
     Google,
-    NGrid,
-    NGridItem,
-    NCard,
   },
   setup() {
     const messageDuration = 5000;
     const formRef = ref();
     const message = useMessage();
-    const featuresSection = ref(null);
     const modelRef = ref({
       email: '',
       password: '',
     });
-
-    const features = [
-      {
-        id: 1,
-        title: "Shorten It Up",
-        description: "Make long URLs tiny for easy sharing. Edit them later if needed!",
-      },
-      {
-        id: 2,
-        title: "Make it Disappear",
-        description: "Set your link to vanish after a certain date, keeping things exciting!",
-      },
-      {
-        id: 3,
-        title: "Secret Knock",
-        description: "Add an extra layer of security with a quick email verification. Only those who get the Knock can access your link!",
-      },
-      {
-        id: 4,
-        title: "Who Opened It?",
-        description: "Get notified when someone opens your link",
-      },
-    ];
 
     const rules = {
       email: [
@@ -137,7 +106,7 @@ export default defineComponent({
             if (!value) {
               return new Error('Email is required');
             } else if (
-              !/^[a-zA-Z0-9.!#$%&'*+/=?^_{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+              !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
                 value
               )
             ) {
@@ -160,25 +129,6 @@ export default defineComponent({
         },
       ],
     };
-
-    function scrollToFeatures() {
-      if (featuresSection.value) {
-        featuresSection.value.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-
-    onMounted(() => {
-      window.addEventListener('scroll', checkScroll);
-    });
-
-    function checkScroll() {
-      if (featuresSection.value) {
-        const rect = featuresSection.value.getBoundingClientRect();
-        if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-          featuresSection.value.classList.add('visible');
-        }
-      }
-    }
 
     async function oauthLogin(provider: any) {
       try {
@@ -219,15 +169,44 @@ export default defineComponent({
       }
     }
 
+    function scrollToFeatures() {
+      const featureSection = document.getElementById('feature-section');
+      if (featureSection) {
+        featureSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    const features = [
+      {
+        id: 1,
+        title: "Shorten It Up",
+        description: "Make long URLs tiny for easy sharing. Edit them later if needed!",
+      },
+      {
+        id: 2,
+        title: "Make it Disappear",
+        description: "Set your link to vanish after a certain date, keeping things exciting!",
+      },
+      {
+        id: 3,
+        title: "Secret Knock",
+        description: "Add an extra layer of security with a quick email verification. Only those who get the Knock can access your link! ",
+      },
+      {
+        id: 4,
+        title: "Who Opened It?",
+        description: "Get notified when someone opens your link",
+      },
+    ];
+
     return {
       oauthLogin,
       formRef,
       model: modelRef,
       rules,
       handleValidateButtonClick,
-      features,
-      featuresSection,
       scrollToFeatures,
+      features,
     };
   },
 });
@@ -240,8 +219,9 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  justify-content: center;
   background-color: #2c2c2c;
+  overflow: hidden;
   position: relative;
   padding: 20px;
   font-family: 'Roboto', sans-serif;
@@ -264,15 +244,6 @@ export default defineComponent({
 #content::after {
   background: radial-gradient(circle, rgba(0,0,255,0.2) 20%, transparent 20%) center center / 10px 10px;
   animation: swirl 20s linear infinite reverse;
-}
-
-@keyframes swirl {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
 }
 
 .container {
@@ -375,6 +346,55 @@ export default defineComponent({
   background-color: #e74c3c;
 }
 
+.features-list {
+  padding: 40px;
+  max-width: 800px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
+}
+
+.features-list h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.features-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features-list li {
+  margin-bottom: 20px;
+}
+
+.features-list h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.features-list p {
+  font-size: 1rem;
+  color: #777;
+}
+
+.scroll-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  background-color: #007bff;
+  color: #fff;
+  transition: background-color 0.3s;
+}
+
+.scroll-button:hover {
+  background-color: #0056b3;
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -384,50 +404,5 @@ export default defineComponent({
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.view-features-btn {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 10;
-}
-
-.features-section {
-  padding: 60px 20px;
-  background-color: #f8f9fa;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s, transform 0.5s;
-  width: 100%;
-  max-width: 1200px;
-  margin-top: 40px;
-}
-
-.features-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.features-section h2 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.features-section h3 {
-  font-size: 1.5rem;
-  margin-bottom: 30px;
-  color: #666;
-}
-
-.n-card {
-  height: 100%;
-}
-
-.n-card-header {
-  font-size: 1.2rem;
-  font-weight: bold;
 }
 </style>
