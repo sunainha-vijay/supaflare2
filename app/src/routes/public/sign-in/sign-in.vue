@@ -86,7 +86,6 @@ import { handleSignIn, handleOAuthLogin } from '@/services/auth';
 import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon } from 'naive-ui';
 import { Github, Google } from '@vicons/fa';
 import { useRouter } from 'vue-router';
-import faqs from '@/data/faqs.js';
 
 export default defineComponent({
   name: 'Auth',
@@ -182,6 +181,35 @@ export default defineComponent({
       }
     }
 
+    // FAQ data
+    const faqs = ref([
+      {
+        id: 1,
+        title: 'Secure Links',
+        description: 'All links are encrypted and can be set to expire after a certain time or number of clicks.',
+      },
+      {
+        id: 2,
+        title: 'Custom URLs',
+        description: 'Create custom short URLs that are easy to remember and share.',
+      },
+      {
+        id: 3,
+        title: 'Analytics',
+        description: 'Track who clicked your links and when, with detailed analytics.',
+      },
+      {
+        id: 4,
+        title: 'Password Protection',
+        description: 'Add an extra layer of security with password-protected links.',
+      },
+      {
+        id: 5,
+        title: 'User Management',
+        description: 'Manage who can see your links with advanced user management tools.',
+      },
+    ]);
+
     return {
       oauthLogin,
       formRef,
@@ -226,24 +254,15 @@ export default defineComponent({
 }
 
 #content::after {
-  background: radial-gradient(circle, rgba(0,0,255,0.2) 20%, transparent 20%) center center / 10px 10px;
-  animation: swirl 20s linear infinite reverse;
+  animation-duration: 30s;
 }
 
 @keyframes swirl {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+  from {transform: translate(-50%, -50%) rotate(0deg);}
+  to {transform: translate(-50%, -50%) rotate(360deg);}
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
   z-index: 1;
   width: 100%;
   max-width: 600px;
