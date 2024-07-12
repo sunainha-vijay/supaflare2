@@ -2,13 +2,13 @@
   <div id="content">
     <div class="container">
       <div class="features">
-        <h1>Keep your links short and secure!</h1>
+        <img class="logo" src="/supaflare.png" alt="Supaflare Logo" />
+        <h1>Keep your links short and secure with TwistURL</h1>
         <p>
           Go beyond short links! Shorten URLs and share them with a select group, but keep the contents a secret. Set expiration dates and track access to your shortened URLs. Know exactly who sees your info, and when it disappears forever.
         </p>
       </div>
       <div class="auth">
-        <h2>Welcome to TwistURL!</h2>
         <h1>Sign In</h1>
         <n-form ref="formRef" :model="model" :rules="rules">
           <n-form-item path="email" label="Username">
