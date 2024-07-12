@@ -178,22 +178,38 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: linear-gradient(270deg, #ff7e5f, #feb47b, #ff7e5f);
-  background-size: 600% 600%;
-  animation: gradient 10s ease infinite;
+  background-color: #2c2c2c;
+  overflow: hidden;
+  position: relative;
   padding: 20px;
   font-family: 'Roboto', sans-serif;
 }
 
-@keyframes gradient {
+#content::before, #content::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,0,0.2) 20%, transparent 20%) center center / 10px 10px;
+  border-radius: 50%;
+  mix-blend-mode: color-dodge;
+  animation: swirl 20s linear infinite;
+  z-index: 0;
+}
+
+#content::after {
+  background: radial-gradient(circle, rgba(0,0,255,0.2) 20%, transparent 20%) center center / 10px 10px;
+  animation: swirl 20s linear infinite reverse;
+}
+
+@keyframes swirl {
   0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
   }
   100% {
-    background-position: 0% 50%;
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
@@ -209,6 +225,8 @@ export default defineComponent({
   max-width: 1200px;
   width: 100%;
   animation: fadeIn 1s ease-in-out;
+  position: relative;
+  z-index: 1;
 }
 
 .features {
@@ -306,4 +324,5 @@ export default defineComponent({
   }
 }
 </style>
+
 
