@@ -220,15 +220,33 @@ export default defineComponent({
   padding: 20px;
   font-family: 'Roboto', sans-serif;
   min-height: 100vh;
-  animation: swirl 20s infinite linear;
+}
+
+#content::before, #content::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,0,0.2) 20%, transparent 20%) center center / 10px 10px;
+  border-radius: 50%;
+  mix-blend-mode: color-dodge;
+  animation: swirl 20s linear infinite;
+  z-index: 0;
+}
+
+#content::after {
+  background: radial-gradient(circle, rgba(0,0,255,0.2) 20%, transparent 20%) center center / 10px 10px;
+  animation: swirl 20s linear infinite reverse;
 }
 
 @keyframes swirl {
   0% {
-    background-position: 0 0;
+    transform: translate(-50%, -50%) rotate(0deg);
   }
   100% {
-    background-position: 100% 100%;
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
@@ -378,21 +396,5 @@ export default defineComponent({
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* Swirl animation background */
-@keyframes swirl {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 100% 100%;
-  }
-}
-
-#content {
-  background: radial-gradient(circle, rgba(44,44,44,1) 0%, rgba(34,34,34,1) 100%);
-  background-size: 200% 200%;
-  animation: swirl 20s linear infinite;
 }
 </style>
