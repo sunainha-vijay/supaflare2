@@ -1,64 +1,62 @@
 <template>
-  <public-view>
-    <div id="content">
-      <div class="landing-page">
-        <div class="features-container">
-          <h1>Keep your links short and secure!</h1>
-          <p>
-            Go beyond short links! Shorten URLs and share them with a select group, but keep the contents a secret. Set expiration dates and track access to your shortened URLs. Know exactly who sees your info, and when it disappears forever.
-          </p>
-        </div>
-        <div class="auth-container">
-          <h2>Welcome to TwistURL!</h2>
-          <h1>Sign In</h1>
-          <n-form ref="formRef" :model="model" :rules="rules">
-            <n-form-item path="email" label="Username">
-              <n-input
-                v-model:value="model.email"
-                placeholder="Enter Username"
-                @keydown.enter="handleValidateButtonClick"
-              />
-            </n-form-item>
-            <n-form-item path="password" label="Password">
-              <n-input
-                v-model:value="model.password"
-                type="password"
-                placeholder="Enter Password"
-                @keydown.enter="handleValidateButtonClick"
-              />
-            </n-form-item>
-            <div class="button-container">
-              <n-button round type="primary" @click="handleValidateButtonClick">
-                Sign In
-              </n-button>
-            </div>
-          </n-form>
-          <n-divider title-placement="left">
-            <router-link to="/signup">Don't have an account? Sign-Up</router-link>
-          </n-divider>
-          <n-divider title-placement="left">Or continue with</n-divider>
-          <n-space justify="space-around">
-            <n-button @click="oauthLogin('github')">
-              <template #icon>
-                <n-icon>
-                  <Github />
-                </n-icon>
-              </template>
-              GitHub
+  <div id="content">
+    <div class="container">
+      <div class="features">
+        <h1>Keep your links short and secure!</h1>
+        <p>
+          Go beyond short links! Shorten URLs and share them with a select group, but keep the contents a secret. Set expiration dates and track access to your shortened URLs. Know exactly who sees your info, and when it disappears forever.
+        </p>
+      </div>
+      <div class="auth">
+        <h2>Welcome to TwistURL!</h2>
+        <h1>Sign In</h1>
+        <n-form ref="formRef" :model="model" :rules="rules">
+          <n-form-item path="email" label="Username">
+            <n-input
+              v-model:value="model.email"
+              placeholder="Enter Username"
+              @keydown.enter="handleValidateButtonClick"
+            />
+          </n-form-item>
+          <n-form-item path="password" label="Password">
+            <n-input
+              v-model:value="model.password"
+              type="password"
+              placeholder="Enter Password"
+              @keydown.enter="handleValidateButtonClick"
+            />
+          </n-form-item>
+          <div class="button-container">
+            <n-button round type="primary" @click="handleValidateButtonClick">
+              Sign In
             </n-button>
-            <n-button @click="oauthLogin('google')">
-              <template #icon>
-                <n-icon>
-                  <Google />
-                </n-icon>
-              </template>
-              Google
-            </n-button>
-          </n-space>
-        </div>
+          </div>
+        </n-form>
+        <n-divider title-placement="left">
+          <router-link to="/signup">Don't have an account? Sign-Up</router-link>
+        </n-divider>
+        <n-divider title-placement="left">Or continue with</n-divider>
+        <n-space justify="space-around">
+          <n-button @click="oauthLogin('github')">
+            <template #icon>
+              <n-icon>
+                <Github />
+              </n-icon>
+            </template>
+            GitHub
+          </n-button>
+          <n-button @click="oauthLogin('google')">
+            <template #icon>
+              <n-icon>
+                <Google />
+              </n-icon>
+            </template>
+            Google
+          </n-button>
+        </n-space>
       </div>
     </div>
-  </public-view>
+  </div>
 </template>
 
 <script lang="ts">
@@ -178,36 +176,48 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
   height: 100vh;
-  text-align: center;
-  background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+  background-color: #f8f9fa;
   padding: 20px;
 }
 
-.landing-page {
+.container {
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
-  background-color: #fff;
-  border-radius: 10px;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 8px;
   padding: 40px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  max-width: 1200px;
+  max-width: 1100px;
   width: 100%;
 }
 
-.features-container {
+.features {
   flex: 1;
-  margin-right: 20px;
+  padding-right: 20px;
 }
 
-.auth-container {
+.auth {
   flex: 1;
-  text-align: center;
+  padding-left: 20px;
 }
 
-h1, h2 {
+.features h1 {
+  font-size: 2.5rem;
   margin-bottom: 20px;
+  color: #343a40;
+}
+
+.features p {
+  font-size: 1.1rem;
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+.auth h1, .auth h2 {
+  margin-bottom: 20px;
+  color: #343a40;
 }
 
 .n-form-item {
@@ -223,5 +233,12 @@ h1, h2 {
 .n-space {
   margin-top: 20px;
 }
-</style>
 
+.n-button {
+  width: 100%;
+}
+
+.n-divider {
+  margin: 20px 0;
+}
+</style>
