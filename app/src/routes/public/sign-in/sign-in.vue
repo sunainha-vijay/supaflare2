@@ -1,3 +1,4 @@
+
 <template>
   <div id="content">
     <div class="container">
@@ -56,27 +57,6 @@
         </n-space>
       </div>
     </div>
-    <!-- FAQ Section Start -->
-    <div id="faq" class="container mx-auto px-5 md:w-4/5">
-      <section class="py-16 pt-18">
-        <div class="w-4/5 md:w-3/5 mx-auto">
-          <h2 class="text-3xl md:text-4xl font-theme-heading font-medium text-center">Features</h2>
-          <p class="text-theme-grayish-blue text-center mt-7 font-theme-content text-lg">Our very own cool features</p>
-        </div>
-        <div class="mt-10 w-full lg:w-3/5 mx-auto">
-          <ul class="shadow-lg">
-            <template v-for="(faq, index) in faqs" :key="faq.id">
-              <li @click="isOpen = faq.id" :class="isOpen === faq.id ? 'text-theme-secondary' : ''" class="font-theme-content font-medium text-xl cursor-pointer hover:text-theme-secondary py-5 flex justify-between items-center transition duration-200 bg-slate-100 px-6">
-                <a href="#">{{ faq.title }}</a>
-                <svg :class="isOpen === faq.id ? 'rotate-180 text-theme-secondary' : 'rotate-0 text-theme-primary'" class="transform" xmlns="http://www.w3.org/2000/svg" width="18" height="12"><path fill="none" stroke="currentColor" stroke-width="3" d="M1 1l8 8 8-8" /></svg>
-              </li>
-              <p v-show="isOpen === faq.id" class="bg-slate-50 px-6 font-theme-content text-md lg:text-lg py-5 text-gray-500 text-justify">{{ faq.description }}</p>
-            </template>
-          </ul>
-        </div>
-      </section>
-    </div>
-    <!-- FAQ Section End -->
   </div>
 </template>
 
@@ -108,7 +88,6 @@ export default defineComponent({
       email: '',
       password: '',
     });
-    const isOpen = ref(1);
 
     const rules = {
       email: [
@@ -181,43 +160,12 @@ export default defineComponent({
       }
     }
 
-    // FAQ data
-    const faqs = ref([
-      {
-        id: 1,
-        title: 'Secure Links',
-        description: 'All links are encrypted and can be set to expire after a certain time or number of clicks.',
-      },
-      {
-        id: 2,
-        title: 'Custom URLs',
-        description: 'Create custom short URLs that are easy to remember and share.',
-      },
-      {
-        id: 3,
-        title: 'Analytics',
-        description: 'Track who clicked your links and when, with detailed analytics.',
-      },
-      {
-        id: 4,
-        title: 'Password Protection',
-        description: 'Add an extra layer of security with password-protected links.',
-      },
-      {
-        id: 5,
-        title: 'User Management',
-        description: 'Manage who can see your links with advanced user management tools.',
-      },
-    ]);
-
     return {
       oauthLogin,
       formRef,
       model: modelRef,
       rules,
       handleValidateButtonClick,
-      faqs,
-      isOpen,
     };
   },
 });
@@ -228,7 +176,6 @@ export default defineComponent({
 
 #content {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
@@ -254,119 +201,127 @@ export default defineComponent({
 }
 
 #content::after {
-  animation-duration: 30s;
+  background: radial-gradient(circle, rgba(0,0,255,0.2) 20%, transparent 20%) center center / 10px 10px;
+  animation: swirl 20s linear infinite reverse;
 }
 
 @keyframes swirl {
-  from {transform: translate(-50%, -50%) rotate(0deg);}
-  to {transform: translate(-50%, -50%) rotate(360deg);}
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 .container {
-  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 60px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
   width: 100%;
-  max-width: 600px;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 15px;
+  animation: fadeIn 1s ease-in-out;
+  position: relative;
+  z-index: 1;
 }
 
 .features {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.auth {
+  flex: 1;
+  padding-left: 40px;
   text-align: center;
-  margin-bottom: 40px;
 }
 
 .features h1 {
-  font-size: 2.5em;
-  color: #ffffff;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #333;
   font-weight: 700;
 }
 
 .features p {
-  color: #d3d3d3;
-  font-size: 1.2em;
-  margin-top: 10px;
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6;
 }
 
-.auth {
-  width: 100%;
-}
-
-.auth h2 {
-  font-size: 2em;
-  color: #ffffff;
-  font-weight: 400;
-  margin-bottom: 10px;
-}
-
-.auth h1 {
-  font-size: 2.5em;
-  color: #ffffff;
+.auth h1, .auth h2 {
+  margin-bottom: 20px;
+  color: #333;
   font-weight: 700;
-  margin-bottom: 30px;
+}
+
+.n-form-item {
+  margin-bottom: 20px;
 }
 
 .button-container {
-  text-align: center;
+  display: flex;
+  justify-content: center;
   margin-top: 20px;
 }
 
-.oauth-button {
-  width: 45%;
-  margin: 10px 0;
+.n-space {
+  margin-top: 20px;
 }
 
-.oauth-button.github {
+.n-button {
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.n-button:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.n-divider {
+  margin: 20px 0;
+}
+
+.oauth-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.github {
   background-color: #333;
   color: #fff;
 }
 
-.oauth-button.google {
+.github:hover {
+  background-color: #444;
+}
+
+.google {
   background-color: #db4437;
   color: #fff;
 }
 
-#faq {
-  width: 100%;
+.google:hover {
+  background-color: #e74c3c;
 }
 
-#faq section {
-  padding: 50px 0;
-}
-
-#faq h2 {
-  font-size: 2em;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-#faq p {
-  font-size: 1.2em;
-  color: #666;
-  margin-bottom: 30px;
-}
-
-#faq ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-#faq li {
-  border-bottom: 1px solid #ddd;
-  padding: 15px 0;
-}
-
-#faq li a {
-  text-decoration: none;
-  color: #333;
-}
-
-#faq li a:hover {
-  text-decoration: underline;
-}
-
-#faq svg {
-  transition: transform 0.2s ease;
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
