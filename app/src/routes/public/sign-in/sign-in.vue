@@ -27,7 +27,7 @@
             />
           </n-form-item>
           <div class="button-container">
-            <n-button round type="primary" @click="handleValidateButtonClick">
+            <n-button round type="primary" @click="handleValidateButtonClick" class="sign-in-button">
               Sign In
             </n-button>
           </div>
@@ -65,6 +65,9 @@
         </li>
       </ul>
     </div>
+    <footer>
+      <a href="https://github.com/sunainha-vijay" target="_blank">sunainha-vijay</a>
+    </footer>
   </div>
 </template>
 
@@ -202,6 +205,7 @@ export default defineComponent({
   },
 });
 </script>
+
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
@@ -216,6 +220,16 @@ export default defineComponent({
   padding: 20px;
   font-family: 'Roboto', sans-serif;
   min-height: 100vh;
+  animation: swirl 20s infinite linear;
+}
+
+@keyframes swirl {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
 }
 
 .container {
@@ -281,11 +295,12 @@ export default defineComponent({
 
 .n-button {
   width: 100%;
+  background-color: #ffc107; /* Yellow color */
   transition: background-color 0.3s;
 }
 
 .n-button:hover {
-  background-color: #007bff;
+  background-color: #ffca28; /* Darker yellow color */
   color: #fff;
 }
 
@@ -363,5 +378,21 @@ export default defineComponent({
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Swirl animation background */
+@keyframes swirl {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+#content {
+  background: radial-gradient(circle, rgba(44,44,44,1) 0%, rgba(34,34,34,1) 100%);
+  background-size: 200% 200%;
+  animation: swirl 20s linear infinite;
 }
 </style>
