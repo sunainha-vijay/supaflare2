@@ -10,7 +10,7 @@
         <h2>Features</h2>
         <ul>
          <li> Shorten It Up: Make long URLs tiny for easy sharing. Edit them later if needed</li>
-         <li>Make it Disappear: Set your link to vanish after a certain date, keeping things exciting!/li>
+         <li>Make it Disappear: Set your link to vanish after a certain date, keeping things exciting!</li>
          <li>Secret Knock: Add an extra layer of security with a quick email verification. Only those who get the "knock" can access your link!</li>
         <li>Who Opened It?: Get notified when someone opens your link.</li>
       </ul>
