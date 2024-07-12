@@ -1,13 +1,13 @@
 <template>
   <div id="content">
     <div class="container">
-      <div class="features-section">
+      <div class="features">
         <h1>Keep your links short and secure!</h1>
         <p>
           Go beyond short links! Shorten URLs and share them with a select group, but keep the contents a secret. Set expiration dates and track access to your shortened URLs. Know exactly who sees your info, and when it disappears forever.
         </p>
       </div>
-      <div class="auth-section">
+      <div class="auth">
         <h2>Welcome to TwistURL!</h2>
         <h1>Sign In</h1>
         <n-form ref="formRef" :model="model" :rules="rules">
@@ -56,26 +56,37 @@
         </n-space>
       </div>
     </div>
-    <div class="features-accordion">
-      <h2>Features</h2>
-      <n-collapse>
-        <n-collapse-item title="Shorten It Up" name="1">
-          <n-collapse-item title="Make long URLs tiny for easy sharing. Edit them later if needed!" name="1-1"></n-collapse-item>
-        </n-collapse-item>
-        <n-collapse-item title="Make it Disappear" name="2"></n-collapse-item>
-        <n-collapse-item title="Secret Knock" name="3"></n-collapse-item>
-        <n-collapse-item title="Who Opened It?" name="4"></n-collapse-item>
-      </n-collapse>
+    <!-- FAQ Section Start -->
+    <div id="faq" class="container mx-auto px-5 md:w-4/5">
+      <section class="py-16 pt-18">
+        <div class="w-4/5 md:w-3/5 mx-auto">
+          <h2 class="text-3xl md:text-4xl font-theme-heading font-medium text-center">Features</h2>
+          <p class="text-theme-grayish-blue text-center mt-7 font-theme-content text-lg">Our very own cool features</p>
+        </div>
+        <div class="mt-10 w-full lg:w-3/5 mx-auto">
+          <ul class="shadow-lg">
+            <template v-for="(faq, index) in faqs" :key="faq.id">
+              <li @click="isOpen = faq.id" :class="isOpen === faq.id ? 'text-theme-secondary' : ''" class="font-theme-content font-medium text-xl cursor-pointer hover:text-theme-secondary py-5 flex justify-between items-center transition duration-200 bg-slate-100 px-6">
+                <a href="#">{{ faq.title }}</a>
+                <svg :class="isOpen === faq.id ? 'rotate-180 text-theme-secondary' : 'rotate-0 text-theme-primary'" class="transform" xmlns="http://www.w3.org/2000/svg" width="18" height="12"><path fill="none" stroke="currentColor" stroke-width="3" d="M1 1l8 8 8-8" /></svg>
+              </li>
+              <p v-show="isOpen === faq.id" class="bg-slate-50 px-6 font-theme-content text-md lg:text-lg py-5 text-gray-500 text-justify">{{ faq.description }}</p>
+            </template>
+          </ul>
+        </div>
+      </section>
     </div>
+    <!-- FAQ Section End -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { handleSignIn, handleOAuthLogin } from '@/services/auth';
-import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon, NCollapse, NCollapseItem } from 'naive-ui';
+import { useMessage, NForm, NFormItem, NInput, NButton, NDivider, NSpace, NIcon } from 'naive-ui';
 import { Github, Google } from '@vicons/fa';
 import { useRouter } from 'vue-router';
+import faqs from '@/data/faqs.js';
 
 export default defineComponent({
   name: 'Auth',
@@ -89,8 +100,6 @@ export default defineComponent({
     NIcon,
     Github,
     Google,
-    NCollapse,
-    NCollapseItem,
   },
   setup() {
     const messageDuration = 5000;
@@ -100,6 +109,7 @@ export default defineComponent({
       email: '',
       password: '',
     });
+    const isOpen = ref(1);
 
     const rules = {
       email: [
@@ -178,6 +188,8 @@ export default defineComponent({
       model: modelRef,
       rules,
       handleValidateButtonClick,
+      faqs,
+      isOpen,
     };
   },
 });
@@ -191,7 +203,7 @@ export default defineComponent({
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  height: 100vh;
   background-color: #2c2c2c;
   overflow: hidden;
   position: relative;
@@ -229,82 +241,64 @@ export default defineComponent({
 
 .container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 60px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  max-width: 1200px;
-  width: 100%;
-  animation: fadeIn 1s ease-in-out;
-  position: relative;
   z-index: 1;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 15px;
 }
 
-.features-section, .auth-section {
-  flex: 1;
-  padding: 0 20px;
+.features {
   text-align: center;
+  margin-bottom: 40px;
 }
 
-.features-section h1, .auth-section h1, .auth-section h2 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  color: #333;
+.features h1 {
+  font-size: 2.5em;
+  color: #ffffff;
   font-weight: 700;
 }
 
-.features-section p {
-  font-size: 1.1rem;
-  color: #555;
-  line-height: 1.6;
+.features p {
+  color: #d3d3d3;
+  font-size: 1.2em;
+  margin-top: 10px;
 }
 
-.n-form-item {
-  margin-bottom: 20px;
+.auth {
+  width: 100%;
+}
+
+.auth h2 {
+  font-size: 2em;
+  color: #ffffff;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.auth h1 {
+  font-size: 2.5em;
+  color: #ffffff;
+  font-weight: 700;
+  margin-bottom: 30px;
 }
 
 .button-container {
-  display: flex;
-  justify-content: center;
+  text-align: center;
   margin-top: 20px;
-}
-
-.n-space {
-  margin-top: 20px;
-}
-
-.n-button {
-  width: 100%;
-  transition: background-color 0.3s;
-}
-
-.n-button:hover {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.n-divider {
-  margin: 20px 0;
 }
 
 .oauth-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  transition: background-color 0.3s;
-}
-
-.oauth-button:hover {
-  background-color: #333;
-  color: #fff;
+  width: 45%;
+  margin: 10px 0;
 }
 
 .oauth-button.github {
-  background-color: #24292e;
+  background-color: #333;
   color: #fff;
 }
 
@@ -313,27 +307,47 @@ export default defineComponent({
   color: #fff;
 }
 
-.features-accordion {
+#faq {
   width: 100%;
-  max-width: 800px;
-  margin-top: 40px;
 }
 
-.features-accordion h2 {
-  font-size: 2rem;
+#faq section {
+  padding: 50px 0;
+}
+
+#faq h2 {
+  font-size: 2em;
+  font-weight: 700;
   margin-bottom: 20px;
-  color: #333;
-  text-align: center;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+#faq p {
+  font-size: 1.2em;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+#faq ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#faq li {
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+}
+
+#faq li a {
+  text-decoration: none;
+  color: #333;
+}
+
+#faq li a:hover {
+  text-decoration: underline;
+}
+
+#faq svg {
+  transition: transform 0.2s ease;
 }
 </style>
