@@ -65,7 +65,6 @@
         </li>
       </ul>
     </div>
-    <n-button class="scroll-button" @click="scrollToFeatures">Click to view features</n-button>
   </div>
 </template>
 
@@ -169,13 +168,6 @@ export default defineComponent({
       }
     }
 
-    function scrollToFeatures() {
-      const featureSection = document.getElementById('feature-section');
-      if (featureSection) {
-        featureSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-
     const features = [
       {
         id: 1,
@@ -205,13 +197,11 @@ export default defineComponent({
       model: modelRef,
       rules,
       handleValidateButtonClick,
-      scrollToFeatures,
       features,
     };
   },
 });
 </script>
-
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
@@ -219,31 +209,13 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background-color: #2c2c2c;
   overflow: hidden;
   position: relative;
   padding: 20px;
   font-family: 'Roboto', sans-serif;
-}
-
-#content::before, #content::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,0,0.2) 20%, transparent 20%) center center / 10px 10px;
-  border-radius: 50%;
-  mix-blend-mode: color-dodge;
-  animation: swirl 20s linear infinite;
-  z-index: 0;
-}
-
-#content::after {
-  background: radial-gradient(circle, rgba(0,0,255,0.2) 20%, transparent 20%) center center / 10px 10px;
-  animation: swirl 20s linear infinite reverse;
+  min-height: 100vh;
 }
 
 .container {
@@ -260,6 +232,7 @@ export default defineComponent({
   animation: fadeIn 1s ease-in-out;
   position: relative;
   z-index: 1;
+  margin-bottom: 40px;
 }
 
 .features {
@@ -379,20 +352,6 @@ export default defineComponent({
 .features-list p {
   font-size: 1rem;
   color: #777;
-}
-
-.scroll-button {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  z-index: 1000;
-  background-color: #007bff;
-  color: #fff;
-  transition: background-color 0.3s;
-}
-
-.scroll-button:hover {
-  background-color: #0056b3;
 }
 
 @keyframes fadeIn {
