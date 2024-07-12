@@ -295,7 +295,7 @@ export default defineComponent({
 
 .n-button {
   width: 100%;
-  background-color: #ffc107; /* Yellow color */
+  background-color: #ffbc58; /* Yellow color */
   transition: background-color 0.3s;
 }
 
